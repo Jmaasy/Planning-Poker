@@ -1,0 +1,480 @@
+<!-- ./client/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    
+    <style>
+      * {
+        font-family: "Avenir";
+
+        --primary: #B8405E;
+        --secondary: #313552;
+        --background: #313552;
+      }
+
+      html {
+        background: var(--background);
+      }
+
+      html, body {
+        height: 100%;
+        margin: 0;
+      }
+      
+      .voting-buttons {
+        position: absolute;
+        bottom: 0;
+        padding: 20px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: fit-content;
+      }
+
+      .voting-buttons button {
+        border-radius: 6px;
+        padding: 22px 0px;
+        width: 47px;
+        margin: 0 5px;
+        background: unset;
+        border: 2px solid var(--primary);
+        color: #b55a5b;
+        font-size: 20px;
+        font-weight: 100;
+
+        cursor: pointer;
+      }
+
+      .voting-buttons button:hover {
+        background: var(--primary);
+        color: #fff;
+      }
+
+      .register-user {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: max-content;
+        height: max-content;
+      }
+
+      .register-user input {
+        border: none;
+        padding: 10px;
+        width: 300px;
+      }
+
+      .register-user button {
+        border: none;
+        padding: 10px;
+        background: var(--primary);
+        color: #fff;
+        margin-left: -4px;
+        cursor: pointer;
+      }
+
+      .scene-wrapper {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: max-content;
+        height: max-content;
+      }
+      
+      .register-scene, .create-scene, .join-scene, .room-scene {
+        height: calc(100% - 120px);
+        position: relative;
+      }
+
+      .create-scene span {
+        font-size: 1.4em;
+        color: var(--primary);
+        display: block;
+      }
+
+      .create-scene button {
+        padding: 10px 48px;
+        border: none;
+        background: var(--primary);
+        color: #fff;
+        margin-top: 12px;
+        cursor: pointer;
+      }
+
+      .pyc-center {
+        width: 350px;
+        vertical-align: middle;
+        text-align: center;
+        background: var(--primary);
+        border-radius: 11px;
+        color: #fff;
+        margin: 14px;
+        position: relative;
+        height: 142px;
+      }
+
+      .pyc-center > span {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        left: 0;
+        right: 0;
+        height: max-content;
+        width: max-content;
+      }
+
+      .pyc-center button {
+        border: none;
+        padding: 10px 40px;
+        background: var(--secondary);
+        color: #fff;
+        border-radius: 6px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        left: 0;
+        right: 0;
+        height: max-content;
+        width: max-content;
+        cursor: pointer;
+      }
+
+      .room-identifier {
+        position: absolute;
+        left: 50px;
+        bottom: 0;
+        margin: 37px;
+        color: #fff;
+        opacity: .4;
+      }
+
+      .lower-users, .upper-users {
+        text-align: center;
+      }
+
+      .lower-users .card, .upper-users .card {
+        display: inline-block;
+        margin: 0 10px;
+      }
+
+      .lower-users .card.selected .number, .upper-users .card.selected .number, .voting-buttons button.selected {
+        background: var(--primary);
+        color: #fff;
+      }
+
+      .lower-users .card span:last-child, .upper-users .card span:first-child {
+        color: #fff;
+      }
+
+      .lower-users .card span:first-child, .upper-users .card span:last-child {
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        width: 40px;
+        display: block;
+        border-radius: 6px;
+        padding: 32px 0 30px 0px;
+        height: 0;
+        margin:10px auto;
+      }
+
+      .upper-users .number {
+        padding: 10px 0 52px 0px !important;
+      }
+
+      .share-button {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        margin: 30px;
+        opacity: .5;
+      }
+
+      .share-button:hover {
+        opacity: 1;
+      }
+
+      .share-button path {
+        cursor: pointer;
+      }
+
+      .backdrop {
+        background: url("images/goat.png");
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: -1;
+        opacity: .04;
+      }
+
+      #user-name-input {
+        padding: 10px;
+        width: 300px;
+        border: none;
+        color: var(--primary);
+      }
+
+      #user-name-continue {
+        padding: 10px;
+        border: none;
+        margin-left: -6px;
+        background: var(--primary);
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="backdrop"></div>
+    <div class="register-scene" hidden>
+      <div class="scene-wrapper">
+        <input type="text" id="user-name-input" />
+        <button onClick="connect()" id="user-name-continue">continue</button>
+      </div>
+    </div>
+    <div class="create-scene" hidden>
+      <div class="scene-wrapper">
+        <span class="username-wrapper">
+          Welcome
+        </span>
+        <button onClick="createRoom()" id="create-room-button">Create Room</button>
+      </div>
+    </div>
+    <div class="join-scene" hidden>
+      <div class="scene-wrapper">
+        <span class="username-wrapper">
+          Welcome <span class="username"></span><br />
+        </span>
+      </div>
+    </div>
+    <div class="room-scene" hidden>
+      <div class="scene-wrapper">
+        <div class="upper-users"></div>
+        <div class="pyc-center">
+          <span class="title">Pick your cards</span>
+          <span class="reveal" hidden>Reveal in <span class="seconds"></span></span>
+          <button onClick="revealCards()" class="reveal-cards" hidden>Reveal cards</button>
+          <button onClick="resetCards()" class="reset-cards" hidden>Reset cards</button>
+        </div>
+        <div class="lower-users"></div>
+      </div>
+      <svg width="40" height="40" fill="none" viewBox="0 0 528 552" class="share-button">
+        <path d="M507.544 253.04C518.989 266.207 518.989 285.793 507.544 298.96L381.166 444.361C359.928 468.797 319.75 453.776 319.75 421.401L319.75 130.599C319.75 98.2238 359.928 83.2033 381.166 107.639L507.544 253.04Z" fill="white" onclick="copyRoomLink()"></path>
+        <path d="M87.1776 293.391C106.953 271.249 129.854 252.111 155.156 236.581L160.99 233.001C194.428 212.478 231.063 197.693 269.378 189.256L320.5 178V373V373C294.246 373 268.07 375.873 242.441 381.569L236 383L220.182 388.323C196.096 396.429 172.663 406.36 150.086 418.028L139.5 423.5V423.5C112.901 440.124 88.0495 459.392 65.3227 481.01L58.5 487.5L26.059 519.514C22.592 522.935 17.6292 524.37 12.8716 523.325V523.325C5.58787 521.727 0.733904 514.826 1.69054 507.431L8.50953 454.715C11.4839 431.72 18.1269 409.352 28.1853 388.461L39.8237 364.289C52.2133 338.557 68.1534 314.692 87.1776 293.391V293.391Z" fill="white" onclick="copyRoomLink()"></path>
+      </svg>
+      <span class="room-identifier"><span class="room-id"></span></span>
+    </div>
+
+    <div class="voting-buttons" hidden>
+      <button data-vote="1" onClick="vote(1)">1</button>
+      <button data-vote="2" onClick="vote(2)">2</button>
+      <button data-vote="3" onClick="vote(3)">3</button>
+      <button data-vote="5" onClick="vote(5)">5</button>
+      <button data-vote="8" onClick="vote(8)">8</button>
+      <button data-vote="13" onClick="vote(13)">13</button>
+      <button data-vote="21" onClick="vote(21)">21</button>
+      <button data-vote="34" onClick="vote(34)">34</button>
+      <button data-vote="55" onClick="vote(55)">55</button>
+      <button data-vote="89" onClick="vote(89)">89</button>
+      <button data-vote="?" onClick="vote('?')">?</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>  
+      let socket = undefined;
+      let votedValue = 1;
+      let oldVotedValue = 1;
+      let id = null;
+
+      if(window.location.search.replace("?username=", '') != '') {
+        document.querySelector(".username-wrapper").removeAttribute("hidden");
+        document.querySelector(".username-wrapper").innerHTML = "Welcome " + window.location.search.replace("?username=", '');
+
+        connect(window.location.search.replace("?username=", ''));
+      } else if(window.location.pathname.replace("/", "") != '') {
+        document.querySelector(".register-scene").removeAttribute("hidden");
+      } else if(window.location.search.replace("?username=", '') == '') {
+        document.querySelector(".register-scene").removeAttribute("hidden");
+      }
+
+      function copyRoomLink() {
+        const link = `localhost:5000/${document.querySelector(".room-id").innerHTML}`;
+        navigator.clipboard.writeText(link);
+      }
+
+      function revealCards() {
+        socket.emit("reveal-votes");
+      }
+
+      function resetCards() {
+        socket.emit("reset-votes");
+      }
+
+      function connect(queryName = undefined) {
+        const name = (queryName == undefined) ? document.querySelector("#user-name-input").value : queryName;
+
+        document.querySelector(".lower-users").innerHTML = `
+          <div class="card" data-id="tbs">
+            <span class="number"></span>
+            <span>${name}</span>
+          </div>
+        `;
+
+        socket = io("localhost:5000");
+        socket.emit("create-user", name);
+
+        socket.on("vote-processed", event => {
+          const el = document.querySelector(`.card[data-id='${event.content.clientId}']`);
+          el.classList = "card selected";
+
+          document.querySelector(".pyc-center span.title").setAttribute("hidden", true);
+          document.querySelector(".pyc-center button.reveal-cards").removeAttribute("hidden");
+
+          if(event.content.clientId == id) {
+            document.querySelector(`button[data-vote='${oldVotedValue}']`).classList = "";
+            document.querySelector(`button[data-vote='${votedValue}']`).classList = "selected";
+          }
+        });
+
+        socket.on("vote-reveal-countdown", event => {
+          document.querySelector(".pyc-center span.title").setAttribute("hidden", true);
+          document.querySelector(".pyc-center button").setAttribute("hidden", true);
+          document.querySelector(".pyc-center span.reveal").removeAttribute("hidden");
+          document.querySelector(".pyc-center span.reveal .seconds").innerHTML = event.content;
+        });
+
+        socket.on("vote-reveal-now", event => {
+          document.querySelector(".pyc-center span.reveal").setAttribute("hidden", true);
+          document.querySelector(".pyc-center button.reset-cards").removeAttribute("hidden");
+
+          event.content.forEach(vote => {
+            document.querySelector(`.card[data-id='${vote.clientId}'] .number`).innerHTML = vote.number;
+          });
+        });
+
+        socket.on("vote-reset-processed", event => {
+          document.querySelectorAll(".card.selected").forEach(x => {
+            x.querySelector(".number").innerHTML = "";
+            x.classList = "card";
+          });
+
+          document.querySelector(".voting-buttons .selected").classList = "";
+
+          document.querySelector(".pyc-center span.title").removeAttribute("hidden");
+          document.querySelector(".pyc-center button.reset-cards").setAttribute("hidden", true);
+        });
+
+        socket.on("create-room-processed", event => {
+          document.querySelector(".room-scene").removeAttribute("hidden");
+          document.querySelector(".voting-buttons").removeAttribute("hidden");
+          document.querySelector(".create-scene").setAttribute("hidden", true);
+          document.querySelector(".register-scene").setAttribute("hidden", true);
+
+          document.querySelector(".room-id").innerHTML = event.content.roomId;
+        })
+
+        socket.on("join-room-processed", event => {
+          const direction = (document.querySelectorAll(".lower-users .card").length > document.querySelectorAll(".upper-users .card").length) ? "upper" : "lower";
+          const order = (direction == "upper") ?  `
+              <span>${event.content.name}</span>
+              <span class="number"></span>
+            ` : `
+              <span class="number"></span>
+              <span>${event.content.name}</span>
+          `;
+
+
+          document.querySelector(`.${direction}-users`).innerHTML = `${document.querySelector(`.${direction}-users`).innerHTML}
+            <div class="card" data-id="${event.content.clientId}">
+              ${order}
+            </div>
+          `;
+        });
+
+        socket.on("join-room-emit-not-processed", event => {
+          window.location.replace(`${window.location.origin}?username=${event.content.name}`)
+        });
+
+        socket.on("join-room-emit-processed", event => {
+          document.querySelector(".room-scene").removeAttribute("hidden");
+          document.querySelector(".create-scene").setAttribute("hidden", true);
+          document.querySelector(".join-scene").setAttribute("hidden", true);
+          document.querySelector(".register-scene").setAttribute("hidden", true);
+          document.querySelector(".voting-buttons").removeAttribute("hidden");
+
+          event.content.connected.forEach(connectedUserData => {
+            const voted = (connectedUserData.voteStatus) ? "selected": "";
+
+            if(connectedUserData.voteStatus) {
+              document.querySelector(".pyc-center span.title").setAttribute("hidden", true);
+              document.querySelector(".pyc-center button").removeAttribute("hidden");
+            }
+
+            if(connectedUserData.user.clientId != event.content.self.clientId) {
+              const direction = (document.querySelectorAll(".lower-users .card").length > document.querySelectorAll(".upper-users .card").length) ? "upper" : "lower";
+              const order = (direction == "upper") ?  `
+                  <span>${connectedUserData.user.name}</span>
+                  <span class="number"></span>
+                ` : `
+                  <span class="number"></span>
+                  <span>${connectedUserData.user.name}</span>
+              `;
+
+              const card = `<div class="card ${voted}" data-id="${connectedUserData.user.clientId}">
+                ${order}
+              </div>`;
+
+              document.querySelector(`.${direction}-users`).innerHTML = `${document.querySelector(`.${direction}-users`).innerHTML} ${card}`;
+            }
+          });
+
+          document.querySelector(".room-id").innerHTML = event.content.self.roomId;
+        });
+
+        socket.on("disconnect-room-processed", event => {
+          document.querySelector(`.card[data-id='${event.content.clientId}']`).remove();
+        });
+
+        socket.on("registered-successfull", event => {
+          id = event.content.clientId;
+
+          document.querySelector(".register-scene").setAttribute("hidden", true);
+          document.querySelector(".username-wrapper").removeAttribute("hidden");
+          document.querySelector(".username-wrapper").innerHTML = "Welcome " + event.content.name;
+          document.querySelector(".card[data-id='tbs']").setAttribute("data-id", event.content.clientId)
+        });
+
+        if(window.location.pathname.replace("/", "") == '') {
+          document.querySelector(".create-scene").removeAttribute("hidden");
+        } else {
+          document.querySelector(".join-scene").removeAttribute("hidden");
+          joinRoom(window.location.pathname.replace("/", ""));
+        }
+      }
+
+      function createRoom() {
+        socket.emit("create-room");
+      }
+
+      function vote(number) {
+        oldVotedValue = votedValue;
+        votedValue = number;
+        socket.emit("vote", number);
+      }
+      
+      function joinRoom(roomId) {
+        socket.emit("join-room", roomId);
+      }
+    </script>
+  </body>
+</html>
