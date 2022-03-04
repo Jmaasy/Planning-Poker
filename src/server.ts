@@ -2,7 +2,9 @@ import * as express from 'express'
 import * as http from 'http'
 import * as socketio from 'socket.io'
 import * as path from "path";
+import * as cors from "cors";
 import PlanningPoker from './planningPoker';
+// const cors = require('cors');
 
 const port = 5000
 const app = express()
@@ -11,6 +13,7 @@ const io = new socketio.Server()
 
 const planningPoker = new PlanningPoker();
 
+app.use(cors());
 app.use(express.static('public'));
 app.get("/*", (req: any, res: any) => {
   res.sendFile(path.resolve("./client/index.html"));

@@ -25,6 +25,18 @@
         margin: 0;
       }
       
+      .logo {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        font-size: 2.4em;
+        color: var(--primary);
+      }
+
+      .logo span {
+        font-weight: bold;
+      }
+
       .voting-buttons {
         position: absolute;
         bottom: 0;
@@ -118,7 +130,7 @@
         background: var(--primary);
         border-radius: 11px;
         color: #fff;
-        margin: 14px;
+        margin: 14px auto;
         position: relative;
         height: 142px;
       }
@@ -166,6 +178,7 @@
 
       .lower-users .card, .upper-users .card {
         display: inline-block;
+        vertical-align: bottom;
         margin: 0 10px;
       }
 
@@ -235,6 +248,7 @@
     </style>
   </head>
   <body>
+    <div class="logo">Planning<span>Poker</span></div>
     <div class="backdrop"></div>
     <div class="register-scene" hidden>
       <div class="scene-wrapper">
@@ -308,7 +322,7 @@
       }
 
       function copyRoomLink() {
-        const link = `localhost:5000/${document.querySelector(".room-id").innerHTML}`;
+        const link = `192.168.86.26:5000/${document.querySelector(".room-id").innerHTML}`;
         navigator.clipboard.writeText(link);
       }
 
@@ -330,7 +344,7 @@
           </div>
         `;
 
-        socket = io("localhost:5000");
+        socket = io("192.168.86.26:5000");
         socket.emit("create-user", name);
 
         socket.on("vote-processed", event => {

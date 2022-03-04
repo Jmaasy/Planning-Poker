@@ -8,7 +8,6 @@ interface Response {
 
 function emitToUsers(sockets: Socket[], event: string, response: Response) {
     sockets.forEach((socket: Socket) => {
-        console.log(`[EVENT] sending event(${event}) to clientId ${socket.id}`);
         socket.emit(event, response);
     });
 }
