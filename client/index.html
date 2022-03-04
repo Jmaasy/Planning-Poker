@@ -252,7 +252,7 @@
     <div class="backdrop"></div>
     <div class="register-scene" hidden>
       <div class="scene-wrapper">
-        <input type="text" id="user-name-input" />
+        <input type="text" id="user-name-input" maxlength="12"/>
         <button onClick="connect()" id="user-name-continue">continue</button>
       </div>
     </div>
@@ -322,8 +322,10 @@
       }
 
       function copyRoomLink() {
-        const link = `192.168.86.26:5000/${document.querySelector(".room-id").innerHTML}`;
-        navigator.clipboard.writeText(link);
+        const el = document.createElement("span");
+              el.innerHTML = `192.168.86.26:5000/${document.querySelector(".room-id").innerHTML}`;
+        el.select();
+        document.execCommand('copy');
       }
 
       function revealCards() {
