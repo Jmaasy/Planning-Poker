@@ -5,7 +5,6 @@ import { buildResponse, emitToSelf } from "../messaging";
 
 class UserHandler {
     private userValidator = new UserValidator();
-    // private usersConnected: { [id: string] : User } = {};
     private usersConnected: Map<string, User> = new Map();
 
     createUser(socket: Socket, clientId: string, name: string) {
