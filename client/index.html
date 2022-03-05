@@ -286,7 +286,7 @@
         <path d="M507.544 253.04C518.989 266.207 518.989 285.793 507.544 298.96L381.166 444.361C359.928 468.797 319.75 453.776 319.75 421.401L319.75 130.599C319.75 98.2238 359.928 83.2033 381.166 107.639L507.544 253.04Z" fill="white" onclick="copyRoomLink()"></path>
         <path d="M87.1776 293.391C106.953 271.249 129.854 252.111 155.156 236.581L160.99 233.001C194.428 212.478 231.063 197.693 269.378 189.256L320.5 178V373V373C294.246 373 268.07 375.873 242.441 381.569L236 383L220.182 388.323C196.096 396.429 172.663 406.36 150.086 418.028L139.5 423.5V423.5C112.901 440.124 88.0495 459.392 65.3227 481.01L58.5 487.5L26.059 519.514C22.592 522.935 17.6292 524.37 12.8716 523.325V523.325C5.58787 521.727 0.733904 514.826 1.69054 507.431L8.50953 454.715C11.4839 431.72 18.1269 409.352 28.1853 388.461L39.8237 364.289C52.2133 338.557 68.1534 314.692 87.1776 293.391V293.391Z" fill="white" onclick="copyRoomLink()"></path>
       </svg>
-      <span class="room-identifier"><span hidden>jeffreymaas.dev/</span><span class="room-id"></span></span>
+      <span class="room-identifier"><span class="room-id"></span></span>
     </div>
 
     <div class="voting-buttons" hidden>
@@ -323,8 +323,7 @@
 
       function copyRoomLink() {
         const el = document.querySelector(".room-identifier");
-              el.select();
-        document.execCommand('copy');
+        navigator.clipboard.writeText(`jeffreymaas.dev/${el.innerHTML}`);
       }
 
       function revealCards() {
