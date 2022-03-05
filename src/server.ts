@@ -7,18 +7,16 @@ import * as cors from "cors";
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import PlanningPoker from './planningPoker';
-const env = dotenv.config();
-// const cors = require('cors');
 
-const port = 5000
+const env = dotenv.config();
+const port = 443
+const planningPoker = new PlanningPoker();
 const app = express()
 const server = https.createServer({
   cert: fs.readFileSync(process.env.CRT),
   key: fs.readFileSync(process.env.KEY)
 }, app);
 const io = new socketio.Server()
-
-const planningPoker = new PlanningPoker();
 
 app.use(cors());
 app.use(express.static('public'));
