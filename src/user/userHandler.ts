@@ -1,7 +1,7 @@
 import User from "./user";
 import UserValidator from "./userValidator";
 import { Socket, Server } from 'socket.io';
-import { buildResponse, emitToSelf } from "../messaging";
+import { buildResponse, emitToSelf } from "../response";
 
 class UserHandler {
     private userValidator = new UserValidator();

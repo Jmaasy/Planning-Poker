@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { buildResponse, emitToSelf, emitToUsers } from './messaging';
+import { buildResponse, emitToSelf, emitToUsers } from './response';
 import { RoomState } from './room/room';
 import RoomHandler from './room/roomHandler';
 import UserHandler from './user/userHandler';

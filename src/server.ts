@@ -1,14 +1,21 @@
 import * as express from 'express'
 import * as http from 'http'
+import * as https from 'https'
 import * as socketio from 'socket.io'
 import * as path from "path";
 import * as cors from "cors";
+import * as dotenv from 'dotenv';
+import * as fs from 'fs';
 import PlanningPoker from './planningPoker';
+const env = dotenv.config();
 // const cors = require('cors');
 
 const port = 5000
 const app = express()
-const server = http.createServer(app)
+const server = https.createServer({
+  cert: fs.readFileSync(process.env.CRT),
+  key: fs.readFileSync(process.env.KEY)
+}, app);
 const io = new socketio.Server()
 
 const planningPoker = new PlanningPoker();
