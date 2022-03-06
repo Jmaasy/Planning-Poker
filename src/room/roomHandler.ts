@@ -10,6 +10,7 @@ class RoomHandler {
             name: name,
             userIds: [userId],
             votes: new Map(),
+            voteHistory: [],
             state: RoomState.STARTING
         });
 
@@ -42,6 +43,18 @@ class RoomHandler {
 
     getVotes(roomId: string): Vote[] {
         if(this.checkIfRoomExists(roomId)) {
+            const voteValues = this.rooms.get(roomId).votes.values();
+            const votedDistribution: Map<string, number> = new Map();
+
+            Array.from(voteValues).forEach((vote, _) => {
+                let number = (votedDistribution.get(vote.number) == undefined) ? 0 : votedDistribution.get(vote.number);
+                    number++
+                votedDistribution.set(vote.number, number);
+            });
+            
+            if(this.rooms.get(roomId).voteHistory.length == 4) this.rooms.get(roomId).voteHistory.shift();
+            this.rooms.get(roomId).voteHistory.push(votedDistribution);
+
             return [...this.rooms.get(roomId).votes.values()];
         } else return [];
     }
@@ -77,6 +90,12 @@ class RoomHandler {
             }
         } else {
             console.log(`[WARN] Trying to reset votes from non existing room`);
+        }
+    }
+
+    getVoteHistory(roomId: string): Map<string, number>[] {
+        if(this.checkIfRoomExists(roomId)) {
+            return this.rooms.get(roomId).voteHistory;
         }
     }
 

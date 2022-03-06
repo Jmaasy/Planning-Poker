@@ -5,247 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>PlanningPoker</title>
     
-    <style>
-      * {
-        font-family: "Avenir";
-
-        --primary: #B8405E;
-        --secondary: #313552;
-        --background: #313552;
-      }
-
-      html {
-        background: var(--background);
-      }
-
-      html, body {
-        height: 100%;
-        margin: 0;
-      }
-      
-      .logo {
-        position: absolute;
-        top: 30px;
-        left: 30px;
-        font-size: 2.4em;
-        color: var(--primary);
-      }
-
-      .logo span {
-        font-weight: bold;
-      }
-
-      .voting-buttons {
-        position: absolute;
-        bottom: 0;
-        padding: 20px;
-        left: 0;
-        right: 0;
-        margin: auto;
-        width: fit-content;
-      }
-
-      .voting-buttons button {
-        border-radius: 6px;
-        padding: 22px 0px;
-        width: 47px;
-        margin: 0 5px;
-        background: unset;
-        border: 2px solid var(--primary);
-        color: #b55a5b;
-        font-size: 20px;
-        font-weight: 100;
-
-        cursor: pointer;
-      }
-
-      .voting-buttons button:hover {
-        background: var(--primary);
-        color: #fff;
-      }
-
-      .register-user {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-        width: max-content;
-        height: max-content;
-      }
-
-      .register-user input {
-        border: none;
-        padding: 10px;
-        width: 300px;
-      }
-
-      .register-user button {
-        border: none;
-        padding: 10px;
-        background: var(--primary);
-        color: #fff;
-        margin-left: -4px;
-        cursor: pointer;
-      }
-
-      .scene-wrapper {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-        width: max-content;
-        height: max-content;
-      }
-      
-      .register-scene, .create-scene, .join-scene, .room-scene {
-        height: calc(100% - 120px);
-        position: relative;
-      }
-
-      .create-scene span {
-        font-size: 1.4em;
-        color: var(--primary);
-        display: block;
-      }
-
-      .create-scene button {
-        padding: 10px 48px;
-        border: none;
-        background: var(--primary);
-        color: #fff;
-        margin-top: 12px;
-        cursor: pointer;
-      }
-
-      .pyc-center {
-        width: 350px;
-        vertical-align: middle;
-        text-align: center;
-        background: var(--primary);
-        border-radius: 11px;
-        color: #fff;
-        margin: 14px auto;
-        position: relative;
-        height: 142px;
-      }
-
-      .pyc-center > span {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        left: 0;
-        right: 0;
-        height: max-content;
-        width: max-content;
-      }
-
-      .pyc-center button {
-        border: none;
-        padding: 10px 40px;
-        background: var(--secondary);
-        color: #fff;
-        border-radius: 6px;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        left: 0;
-        right: 0;
-        height: max-content;
-        width: max-content;
-        cursor: pointer;
-      }
-
-      .room-identifier {
-        position: absolute;
-        left: 50px;
-        bottom: 0;
-        margin: 37px;
-        color: #fff;
-        opacity: .4;
-      }
-
-      .lower-users, .upper-users {
-        text-align: center;
-      }
-
-      .lower-users .card, .upper-users .card {
-        display: inline-block;
-        vertical-align: bottom;
-        margin: 0 10px;
-      }
-
-      .lower-users .card.selected .number, .upper-users .card.selected .number, .voting-buttons button.selected {
-        background: var(--primary);
-        color: #fff;
-      }
-
-      .lower-users .card span:last-child, .upper-users .card span:first-child {
-        color: #fff;
-      }
-
-      .lower-users .card span:first-child, .upper-users .card span:last-child {
-        color: var(--primary);
-        border: 2px solid var(--primary);
-        width: 40px;
-        display: block;
-        border-radius: 6px;
-        padding: 32px 0 30px 0px;
-        height: 0;
-        margin:10px auto;
-      }
-
-      .upper-users .number {
-        padding: 10px 0 52px 0px !important;
-      }
-
-      .share-button {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        margin: 30px;
-        opacity: .5;
-      }
-
-      .share-button:hover {
-        opacity: 1;
-      }
-
-      .share-button path {
-        cursor: pointer;
-      }
-
-      .backdrop {
-        background: url("images/goat.png");
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        z-index: -1;
-        opacity: .04;
-      }
-
-      #user-name-input {
-        padding: 10px;
-        width: 300px;
-        border: none;
-        color: var(--primary);
-      }
-
-      #user-name-continue {
-        padding: 10px;
-        border: none;
-        margin-left: -6px;
-        background: var(--primary);
-        color: #fff;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="style/main.css">
   </head>
   <body>
     <div class="logo">Planning<span>Poker</span></div>
@@ -287,6 +49,109 @@
         <path d="M87.1776 293.391C106.953 271.249 129.854 252.111 155.156 236.581L160.99 233.001C194.428 212.478 231.063 197.693 269.378 189.256L320.5 178V373V373C294.246 373 268.07 375.873 242.441 381.569L236 383L220.182 388.323C196.096 396.429 172.663 406.36 150.086 418.028L139.5 423.5V423.5C112.901 440.124 88.0495 459.392 65.3227 481.01L58.5 487.5L26.059 519.514C22.592 522.935 17.6292 524.37 12.8716 523.325V523.325C5.58787 521.727 0.733904 514.826 1.69054 507.431L8.50953 454.715C11.4839 431.72 18.1269 409.352 28.1853 388.461L39.8237 364.289C52.2133 338.557 68.1534 314.692 87.1776 293.391V293.391Z" fill="white" onclick="copyRoomLink()"></path>
       </svg>
       <span class="room-identifier"><span class="room-id"></span></span>
+
+      <div class="previous-votes-wrapper">
+        <span class="gradient-fader"></span>
+        <div class="previous-votes-title">Previous planning votes</div>
+        <ul></ul>
+
+        <!-- <ul>
+          <li>
+            <div class="block-entry">
+              <span class="vote-number-top">2</span>
+              <span class="vote-bar" style="height:50px;"></span>
+              <span class="vote-percentage-bottom">50%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">3</span>
+              <span class="vote-bar" style="height:30px;"></span>
+              <span class="vote-percentage-bottom">30%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">5</span>
+              <span class="vote-bar" style="height:10px;"></span>
+              <span class="vote-percentage-bottom">10%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">8</span>
+              <span class="vote-bar" style="height:5px;"></span>
+              <span class="vote-percentage-bottom">5%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">?</span>
+              <span class="vote-bar" style="height:5px;"></span>
+              <span class="vote-percentage-bottom">5%</span>
+            </div>
+          </li>
+          <li>
+            <div class="block-entry">
+              <span class="vote-number-top">2</span>
+              <span class="vote-bar" style="height:50px;"></span>
+              <span class="vote-percentage-bottom">50%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">3</span>
+              <span class="vote-bar" style="height:30px;"></span>
+              <span class="vote-percentage-bottom">30%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">5</span>
+              <span class="vote-bar" style="height:10px;"></span>
+              <span class="vote-percentage-bottom">10%</span>
+            </div>
+          </li>
+          <li>
+            <div class="block-entry">
+              <span class="vote-number-top">2</span>
+              <span class="vote-bar" style="height:50px;"></span>
+              <span class="vote-percentage-bottom">50%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">5</span>
+              <span class="vote-bar" style="height:10px;"></span>
+              <span class="vote-percentage-bottom">10%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">8</span>
+              <span class="vote-bar" style="height:5px;"></span>
+              <span class="vote-percentage-bottom">5%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">?</span>
+              <span class="vote-bar" style="height:5px;"></span>
+              <span class="vote-percentage-bottom">5%</span>
+            </div>
+          </li>
+          <li>
+            <div class="block-entry">
+              <span class="vote-number-top">2</span>
+              <span class="vote-bar" style="height:50px;"></span>
+              <span class="vote-percentage-bottom">50%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">3</span>
+              <span class="vote-bar" style="height:30px;"></span>
+              <span class="vote-percentage-bottom">30%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">5</span>
+              <span class="vote-bar" style="height:10px;"></span>
+              <span class="vote-percentage-bottom">10%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">8</span>
+              <span class="vote-bar" style="height:5px;"></span>
+              <span class="vote-percentage-bottom">5%</span>
+            </div>
+            <div class="block-entry">
+              <span class="vote-number-top">?</span>
+              <span class="vote-bar" style="height:5px;"></span>
+              <span class="vote-percentage-bottom">5%</span>
+            </div>
+          </li>
+        </ul> -->
+        <span class="partial-backdrop"></span>
+      </div>
     </div>
 
     <div class="voting-buttons" hidden>
@@ -302,193 +167,12 @@
       <button data-vote="89" onClick="vote(89)">89</button>
       <button data-vote="?" onClick="vote('?')">?</button>
     </div>
-
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-    <script>  
-      let socket = undefined;
-      let votedValue = 1;
-      let oldVotedValue = 1;
-      let id = null;
-
-      if(window.location.search.replace("?username=", '') != '') {
-        document.querySelector(".username-wrapper").removeAttribute("hidden");
-        document.querySelector(".username-wrapper").innerHTML = "Welcome " + window.location.search.replace("?username=", '');
-
-        connect(window.location.search.replace("?username=", ''));
-      } else if(window.location.pathname.replace("/", "") != '') {
-        document.querySelector(".register-scene").removeAttribute("hidden");
-      } else if(window.location.search.replace("?username=", '') == '') {
-        document.querySelector(".register-scene").removeAttribute("hidden");
-      }
-
-      function copyRoomLink() {
-        const el = document.querySelector(".room-identifier .room-id");
-        navigator.clipboard.writeText(`https://www.jeffreymaas.dev/${el.innerHTML}`);
-      }
-
-      function revealCards() {
-        socket.emit("reveal-votes");
-      }
-
-      function resetCards() {
-        socket.emit("reset-votes");
-      }
-
-      function connect(queryName = undefined) {
-        const name = (queryName == undefined) ? document.querySelector("#user-name-input").value : queryName;
-
-        document.querySelector(".lower-users").innerHTML = `
-          <div class="card" data-id="tbs">
-            <span class="number"></span>
-            <span>${name}</span>
-          </div>
-        `;
-
-        socket = io("jeffreymaas.dev");
-        socket.emit("create-user", name);
-
-        socket.on("vote-processed", event => {
-          const el = document.querySelector(`.card[data-id='${event.content.clientId}']`);
-          el.classList = "card selected";
-
-          document.querySelector(".pyc-center span.title").setAttribute("hidden", true);
-          document.querySelector(".pyc-center button.reveal-cards").removeAttribute("hidden");
-
-          if(event.content.clientId == id) {
-            document.querySelector(`button[data-vote='${oldVotedValue}']`).classList = "";
-            document.querySelector(`button[data-vote='${votedValue}']`).classList = "selected";
-          }
-        });
-
-        socket.on("vote-reveal-countdown", event => {
-          document.querySelector(".pyc-center span.title").setAttribute("hidden", true);
-          document.querySelector(".pyc-center button").setAttribute("hidden", true);
-          document.querySelector(".pyc-center span.reveal").removeAttribute("hidden");
-          document.querySelector(".pyc-center span.reveal .seconds").innerHTML = event.content;
-        });
-
-        socket.on("vote-reveal-now", event => {
-          document.querySelector(".pyc-center span.reveal").setAttribute("hidden", true);
-          document.querySelector(".pyc-center button.reset-cards").removeAttribute("hidden");
-
-          event.content.forEach(vote => {
-            document.querySelector(`.card[data-id='${vote.clientId}'] .number`).innerHTML = vote.number;
-          });
-        });
-
-        socket.on("vote-reset-processed", event => {
-          document.querySelectorAll(".card.selected").forEach(x => {
-            x.querySelector(".number").innerHTML = "";
-            x.classList = "card";
-          });
-
-          document.querySelector(".voting-buttons .selected").classList = "";
-
-          document.querySelector(".pyc-center span.title").removeAttribute("hidden");
-          document.querySelector(".pyc-center button.reset-cards").setAttribute("hidden", true);
-        });
-
-        socket.on("create-room-processed", event => {
-          document.querySelector(".room-scene").removeAttribute("hidden");
-          document.querySelector(".voting-buttons").removeAttribute("hidden");
-          document.querySelector(".create-scene").setAttribute("hidden", true);
-          document.querySelector(".register-scene").setAttribute("hidden", true);
-
-          document.querySelector(".room-id").innerHTML = event.content.roomId;
-        })
-
-        socket.on("join-room-processed", event => {
-          const direction = (document.querySelectorAll(".lower-users .card").length > document.querySelectorAll(".upper-users .card").length) ? "upper" : "lower";
-          const order = (direction == "upper") ?  `
-              <span>${event.content.name}</span>
-              <span class="number"></span>
-            ` : `
-              <span class="number"></span>
-              <span>${event.content.name}</span>
-          `;
-
-
-          document.querySelector(`.${direction}-users`).innerHTML = `${document.querySelector(`.${direction}-users`).innerHTML}
-            <div class="card" data-id="${event.content.clientId}">
-              ${order}
-            </div>
-          `;
-        });
-
-        socket.on("join-room-emit-not-processed", event => {
-          window.location.replace(`${window.location.origin}?username=${event.content.name}`)
-        });
-
-        socket.on("join-room-emit-processed", event => {
-          document.querySelector(".room-scene").removeAttribute("hidden");
-          document.querySelector(".create-scene").setAttribute("hidden", true);
-          document.querySelector(".join-scene").setAttribute("hidden", true);
-          document.querySelector(".register-scene").setAttribute("hidden", true);
-          document.querySelector(".voting-buttons").removeAttribute("hidden");
-
-          event.content.connected.forEach(connectedUserData => {
-            const voted = (connectedUserData.voteStatus) ? "selected": "";
-
-            if(connectedUserData.voteStatus) {
-              document.querySelector(".pyc-center span.title").setAttribute("hidden", true);
-              document.querySelector(".pyc-center button").removeAttribute("hidden");
-            }
-
-            if(connectedUserData.user.clientId != event.content.self.clientId) {
-              const direction = (document.querySelectorAll(".lower-users .card").length > document.querySelectorAll(".upper-users .card").length) ? "upper" : "lower";
-              const order = (direction == "upper") ?  `
-                  <span>${connectedUserData.user.name}</span>
-                  <span class="number"></span>
-                ` : `
-                  <span class="number"></span>
-                  <span>${connectedUserData.user.name}</span>
-              `;
-
-              const card = `<div class="card ${voted}" data-id="${connectedUserData.user.clientId}">
-                ${order}
-              </div>`;
-
-              document.querySelector(`.${direction}-users`).innerHTML = `${document.querySelector(`.${direction}-users`).innerHTML} ${card}`;
-            }
-          });
-
-          document.querySelector(".room-id").innerHTML = event.content.self.roomId;
-        });
-
-        socket.on("disconnect-room-processed", event => {
-          document.querySelector(`.card[data-id='${event.content.clientId}']`).remove();
-        });
-
-        socket.on("registered-successfull", event => {
-          id = event.content.clientId;
-
-          document.querySelector(".register-scene").setAttribute("hidden", true);
-          document.querySelector(".username-wrapper").removeAttribute("hidden");
-          document.querySelector(".username-wrapper").innerHTML = "Welcome " + event.content.name;
-          document.querySelector(".card[data-id='tbs']").setAttribute("data-id", event.content.clientId)
-        });
-
-        if(window.location.pathname.replace("/", "") == '') {
-          document.querySelector(".create-scene").removeAttribute("hidden");
-        } else {
-          document.querySelector(".join-scene").removeAttribute("hidden");
-          joinRoom(window.location.pathname.replace("/", ""));
-        }
-      }
-
-      function createRoom() {
-        socket.emit("create-room");
-      }
-
-      function vote(number) {
-        oldVotedValue = votedValue;
-        votedValue = number;
-        socket.emit("vote", number);
-      }
-      
-      function joinRoom(roomId) {
-        socket.emit("join-room", roomId);
-      }
-    </script>
+    <script src="js/main.js"></script>
+    <script src="js/socket.js"></script>
+    <script src="js/room.js"></script>
+    <script src="js/vote.js"></script>
+    <script src="js/previous.js"></script>
   </body>
 </html>

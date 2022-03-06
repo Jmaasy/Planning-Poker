@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { buildResponse, emitToSelf, emitToUsers } from './response';
+import { buildResponse, emitToAll, emitToSelf, emitToUsers } from './response';
 import { RoomState } from './room/room';
 import RoomHandler from './room/roomHandler';
 import UserHandler from './user/userHandler';
@@ -52,8 +52,7 @@ class PlanningPoker {
             const sockets = this.userHandler.getSockets(connectedIds, [userId]);
 
             const resp = buildResponse(user);
-            emitToUsers(sockets, "vote-processed", resp);
-            emitToSelf(socket, "vote-processed", resp);
+            emitToAll(sockets, socket, resp, "vote-processed");
 
             console.log(`[VOTE] user ${user.name} has voted ${number}`);
         } else {
@@ -73,8 +72,7 @@ class PlanningPoker {
 
             const sockets = this.getSocketsFromRoomId(user.roomId, [userId]);
             const resp = buildResponse("");
-            emitToUsers(sockets, "vote-reset-processed", resp);
-            emitToSelf(socket, "vote-reset-processed", resp);
+            emitToAll(sockets, socket, resp, "vote-reset-processed");
         }
     }
 
@@ -91,27 +89,31 @@ class PlanningPoker {
         
             setTimeout(_ => {
                 const resp = buildResponse(3);
-                emitToUsers(sockets, "vote-reveal-countdown", resp);
-                emitToSelf(socket, "vote-reveal-countdown", resp);
+                emitToAll(sockets, socket, resp, "vote-reveal-countdown");
             }, 1000);
 
             setTimeout(_ => {
                 const resp = buildResponse(2);
-                emitToUsers(sockets, "vote-reveal-countdown", resp);
-                emitToSelf(socket, "vote-reveal-countdown", resp);
+                emitToAll(sockets, socket, resp, "vote-reveal-countdown");
+
             }, 2000);
 
             setTimeout(_ => {
                 const resp = buildResponse(1);
-                emitToUsers(sockets, "vote-reveal-countdown", resp);
-                emitToSelf(socket, "vote-reveal-countdown", resp);
+                emitToAll(sockets, socket, resp, "vote-reveal-countdown");
             }, 3000);
 
             setTimeout(_ => {
                 const votes = this.roomHandler.getVotes(user.roomId);
                 const resp = buildResponse(votes);
-                emitToUsers(sockets, "vote-reveal-now", resp);
-                emitToSelf(socket, "vote-reveal-now", resp);
+                emitToAll(sockets, socket, resp, "vote-reveal-now");
+
+                console.log(`[VOTE] sending updated vote history for room: ${user.roomId}`);
+                const voteHistory = this.roomHandler.getVoteHistory(user.roomId);
+                const voteHistoryResponse = buildResponse(
+                    voteHistory.map(x => Array.from(x.entries()))
+                );
+                emitToAll(sockets, socket, voteHistoryResponse, "update-vote-history");
             }, 4000);
         }
     }

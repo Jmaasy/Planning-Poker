@@ -12,6 +12,11 @@ function emitToUsers(sockets: Socket[], event: string, response: Response) {
     });
 }
 
+function emitToAll(sockets: Socket[], socket: Socket, response: Response, event: string) {
+    emitToUsers(sockets, event, response);
+    emitToSelf(socket, event, response);
+}
+
 function emitToSelf(socket: Socket, event: string, response: Response) {
     socket.emit(event, response);
 }
@@ -25,4 +30,4 @@ function buildResponse(content: Object, error: boolean = false, message: string 
 }
 
 
-export { buildResponse, emitToUsers, emitToSelf, Response }
+export { buildResponse, emitToUsers, emitToSelf, emitToAll, Response }

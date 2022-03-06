@@ -13,6 +13,7 @@ type Room = {
     name: string,
     userIds: string[]
     votes: Map<string, Vote>,
+    voteHistory: Map<string, number>[]
     state: RoomState
 };
 
