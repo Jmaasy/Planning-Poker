@@ -322,8 +322,8 @@
       }
 
       function copyRoomLink() {
-        const el = document.querySelector(".room-identifier");
-        navigator.clipboard.writeText(`jeffreymaas.dev/${el.innerHTML}`);
+        const el = document.querySelector(".room-identifier .room-id");
+        navigator.clipboard.writeText(`https://www.jeffreymaas.dev/${el.innerHTML}`);
       }
 
       function revealCards() {
