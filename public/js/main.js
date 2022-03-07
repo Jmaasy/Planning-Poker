@@ -1,5 +1,4 @@
-const url = "https://www.jeffreymaas.dev/";
-const devUrl = "localhost:443/";
+const url = "https://jeffreymaas.dev/";
 
 let socket = undefined;
 let votedValue = 1;
@@ -19,7 +18,7 @@ if(window.location.search.replace("?username=", '') != '') {
 
 function copyRoomLink() {
     const el = document.querySelector(".room-identifier .room-id");
-    navigator.clipboard.writeText(`${devUrl}${el.innerHTML}`);
+    navigator.clipboard.writeText(`${url}${el.innerHTML}`);
 }
 
 function revealCards() {

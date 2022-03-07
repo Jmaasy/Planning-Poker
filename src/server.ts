@@ -9,14 +9,14 @@ import * as fs from 'fs';
 import PlanningPoker from './planningPoker';
 
 const env = dotenv.config();
-const port = 443
+const port = 443;
 const planningPoker = new PlanningPoker();
 const app = express()
 const server = https.createServer({
   cert: fs.readFileSync(process.env.CRT),
   key: fs.readFileSync(process.env.KEY)
 }, app);
-const io = new socketio.Server()
+const io = new socketio.Server();
 
 app.use(cors());
 app.use(express.static('public'));

@@ -8,8 +8,8 @@ function connect(queryName = undefined) {
       </div>
     `;
 
-    socket = io(devUrl);
-
+    socket = io(url);
+    
     socket.emit("create-user", name);
 
     socket.on("vote-processed", event => voted(event));
