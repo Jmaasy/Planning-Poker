@@ -71,15 +71,13 @@ function processVoteHistoryUpdate(event) {
         entries.forEach((v,k) => {
                 const number = Object.keys(v)[0];
                 const amountVoted = Object.values(v)[0];
-
                 const height = (50 * (amountVoted / maxVoted));
-                const percentage = 100 * (amountVoted / maxVoted);
 
                 historyWrapper.innerHTML += `
                     <div class="block-entry">
                         <span class="vote-number-top">${number}</span>
                         <span class="vote-bar" style="height:${height}px"></span>
-                        <span class="vote-percentage-bottom">${percentage}%</span>
+                        <span class="vote-percentage-bottom">${amountVoted}</span>
                     </div>
                 `;
         });

@@ -5,30 +5,54 @@ function processRoomJoinedEmit(event) {
     document.querySelector(".register-scene").setAttribute("hidden", true);
     document.querySelector(".voting-buttons").removeAttribute("hidden");
 
+    // event.content.connected.forEach(connectedUserData => {
+    //     const voted = (connectedUserData.voteStatus) ? "selected": "";
+    //     if(connectedUserData.voteStatus) {
+    //       document.querySelector(".pyc-center span.title").setAttribute("hidden", true);
+    //       document.querySelector(".pyc-center button").removeAttribute("hidden");
+    //     }
+    //     if(connectedUserData.user.clientId != event.content.self.clientId) {
+    //       const direction = (document.querySelectorAll(".lower-users .card").length > document.querySelectorAll(".upper-users .card").length) ? "upper" : "lower";
+    //       const order = (direction == "upper") ?  `
+    //           <span>${connectedUserData.user.name}</span>
+    //           <span class="number"></span>
+    //         ` : `
+    //           <span class="number"></span>
+    //           <span>${connectedUserData.user.name}</span>
+    //       `;
+    //       const card = `<div class="card ${voted}" data-id="${connectedUserData.user.clientId}">
+    //         ${order}
+    //       </div>`;
+    //       document.querySelector(`.${direction}-users`).innerHTML = `${document.querySelector(`.${direction}-users`).innerHTML} ${card}`;
+    //     }
+    // });
+
+
     event.content.connected.forEach(connectedUserData => {
-    const voted = (connectedUserData.voteStatus) ? "selected": "";
+        const voted = (connectedUserData.voteStatus) ? "selected": "";
 
-    if(connectedUserData.voteStatus) {
-        document.querySelector(".pyc-center span.title").setAttribute("hidden", true);
-        document.querySelector(".pyc-center button").removeAttribute("hidden");
-    }
+        if(connectedUserData.voteStatus) {
+            document.querySelector(".pyc-center span.title").setAttribute("hidden", true);
+            document.querySelector(".pyc-center button").removeAttribute("hidden");
+        }
 
-    if(connectedUserData.user.clientId != event.content.self.clientId) {
-        const direction = (document.querySelectorAll(".lower-users .card").length > document.querySelectorAll(".upper-users .card").length) ? "upper" : "lower";
-        const order = (direction == "upper") ?  `
-            <span>${connectedUserData.user.name}</span>
-            <span class="number"></span>
-        ` : `
-            <span class="number"></span>
-            <span>${connectedUserData.user.name}</span>
-        `;
+        if(connectedUserData.user.clientId != event.content.self.clientId) {
+            console.log(connectedUserData);
+            const direction = (document.querySelectorAll(".lower-users .card").length > document.querySelectorAll(".upper-users .card").length) ? "upper" : "lower";
+            const order = (direction == "upper") ?  `
+                <span>${connectedUserData.user.name}</span>
+                <span class="number"></span>
+            ` : `
+                <span class="number"></span>
+                <span>${connectedUserData.user.name}</span>
+            `;
 
-        const card = `<div class="card ${voted}" data-id="${connectedUserData.user.clientId}">
-        ${order}
-        </div>`;
+            const card = `<div class="card ${voted}" data-id="${connectedUserData.user.clientId}">
+            ${order}
+            </div>`;
 
-        document.querySelector(`.${direction}-users`).innerHTML = `${document.querySelector(`.${direction}-users`).innerHTML} ${card}`;
-    }
+            document.querySelector(`.${direction}-users`).innerHTML = `${document.querySelector(`.${direction}-users`).innerHTML} ${card}`;
+        }
     });
 
     document.querySelector(".room-id").innerHTML = event.content.self.roomId;

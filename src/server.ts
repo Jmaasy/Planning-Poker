@@ -7,15 +7,17 @@ import * as cors from "cors";
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import PlanningPoker from './planningPoker';
+import Logger from './logger';
 
 const env = dotenv.config();
 const port = 443;
 const planningPoker = new PlanningPoker();
 const app = express()
-const server = https.createServer({
-  cert: fs.readFileSync(process.env.CRT),
-  key: fs.readFileSync(process.env.KEY)
-}, app);
+// const server = https.createServer({
+//   cert: fs.readFileSync(process.env.CRT),
+//   key: fs.readFileSync(process.env.KEY)
+// }, app);
+const server = http.createServer(app);
 const io = new socketio.Server();
 
 app.use(cors());
@@ -36,4 +38,4 @@ io.on('connection', (socket) => {
   socket.on("reset-votes", _ => planningPoker.resetVotes(socket, socket.id));
 });
 
-server.listen(port, () => console.log(`Running on port ${port}`));
+server.listen(port, () => Logger.LOG("STARTING", `Running on port ${port}`));

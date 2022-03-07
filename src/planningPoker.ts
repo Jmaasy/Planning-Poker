@@ -1,4 +1,5 @@
 import { Socket } from 'socket.io';
+import Logger from './logger';
 import { buildResponse, emitToAll, emitToSelf, emitToUsers } from './response';
 import { RoomState } from './room/room';
 import RoomHandler from './room/roomHandler';
@@ -19,9 +20,9 @@ class PlanningPoker {
             const resp = buildResponse(user);
             emitToSelf(socket, "create-room-processed", resp)
         
-            console.log(`[ROOM] user ${user.name} has created room ${roomId}`);
+            Logger.LOG("ROOM", `User ${user.name} has created room ${roomId}`);
         } else {
-            console.log(`[ERROR] Invalid user action! User ${clientId} is not validated and therefore cannot create a room.`);
+            Logger.ERROR(`Invalid user action! User ${clientId} is not validated and therefore cannot vote on a room.`);
         }
     }
 
@@ -54,9 +55,9 @@ class PlanningPoker {
             const resp = buildResponse(user);
             emitToAll(sockets, socket, resp, "vote-processed");
 
-            console.log(`[VOTE] user ${user.name} has voted ${number}`);
+            Logger.LOG("VOTE", `User ${user.name} has voted ${number}`);
         } else {
-            console.log(`[ERROR] Invalid user action! User ${clientId} is not validated and therefore cannot vote on a room.`);
+            Logger.ERROR(`Invalid user action! User ${clientId} is not validated and therefore cannot vote on a room.`);
         }
     }
 
@@ -66,7 +67,12 @@ class PlanningPoker {
             const userId = this.userHandler.getIdentifier(clientId);
             const user = this.userHandler.getUserWithoutSocket(userId);
             
-            console.log(`[VOTE] user ${user.name} has requested to reset votes for room: ${user.roomId}`);
+            if(this.roomHandler.getState(user.roomId) == RoomState.VOTED) {
+                this.roomHandler.setState(user.roomId, RoomState.RESET);
+                return;
+            }
+
+            Logger.LOG("VOTE", `User ${user.name} has requested to reset votes for room: ${user.roomId}`);
 
             this.roomHandler.resetVotes(user.roomId);
 
@@ -82,7 +88,7 @@ class PlanningPoker {
             const userId = this.userHandler.getIdentifier(clientId);
             const user = this.userHandler.getUserWithoutSocket(userId);
             
-            console.log(`[VOTE] user ${user.name} has requested to reveal votes for room: ${user.roomId}`);
+            Logger.LOG("VOTE", `User ${user.name} has requested to reveal votes for room: ${user.roomId}`);
 
             const sockets = this.getSocketsFromRoomId(user.roomId, [userId]);
             this.roomHandler.setState(user.roomId, RoomState.VOTED);
@@ -108,7 +114,8 @@ class PlanningPoker {
                 const resp = buildResponse(votes);
                 emitToAll(sockets, socket, resp, "vote-reveal-now");
 
-                console.log(`[VOTE] sending updated vote history for room: ${user.roomId}`);
+                Logger.LOG("VOTE", `Sending updated vote history for room: ${user.roomId}`);
+
                 const voteHistory = this.roomHandler.getVoteHistory(user.roomId);
                 const voteHistoryResponse = buildResponse(
                     voteHistory.map(x => Array.from(x.entries()))
@@ -126,31 +133,31 @@ class PlanningPoker {
 
                 const user = this.userHandler.getUserWithoutSocket(userId);
 
-                const connectedIds = this.roomHandler.getConnectedUserIds(roomId);
-                const sockets = this.userHandler.getSockets(connectedIds, [userId]);
+                const connectedUserIds = this.roomHandler.getConnectedUserIds(roomId);
+                const sockets = this.userHandler.getSockets(connectedUserIds, [userId]);
 
                 const resp = buildResponse(user, false);
                 const resp2 = buildResponse({
                     self: user,
-                    connected: connectedIds.map(x => {
-                        const user = this.userHandler.getUserWithoutSocket(x);
+                    connected: connectedUserIds.map(x => {
+                        const connectedUser = this.userHandler.getUserWithoutSocket(x);
                         return {
-                            user: user,
-                            voteStatus: this.roomHandler.hasVoted(user.roomId, x)
+                            user: connectedUser,
+                            voteStatus: this.roomHandler.hasVoted(connectedUser.roomId, connectedUser.clientId)
                         }
                     })
                 }, false);
                 emitToUsers(sockets, "join-room-processed", resp);
                 emitToSelf(socket, "join-room-emit-processed", resp2);
 
-                console.log(`[ROOM] user ${user.name} has entered room ${roomId}`);
+                Logger.LOG("ROOM", `User ${user.name} has entered room ${roomId}`);
             } else {
                 const user = this.userHandler.getUserWithoutSocket(userId);
                 const resp = buildResponse(user, false);
                 emitToSelf(socket, "join-room-emit-not-processed", resp);
             }
         } else {
-            console.log(`[ERROR] Invalid user action! User ${clientId} is not validated and therefore cannot join a room.`);
+            Logger.ERROR(`Invalid user action! User ${clientId} is not validated and therefore cannot vote on a room.`);
         }
     }
 

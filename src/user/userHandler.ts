@@ -2,6 +2,7 @@ import User from "./user";
 import UserValidator from "./userValidator";
 import { Socket, Server } from 'socket.io';
 import { buildResponse, emitToSelf } from "../response";
+import Logger from "../logger";
 
 class UserHandler {
     private userValidator = new UserValidator();
@@ -19,7 +20,7 @@ class UserHandler {
             }
         );
 
-        console.log(`[USER] created user ${name}(${clientId})`);
+        Logger.LOG("USER", `Created user ${name}(${clientId})`);
 
         const resp = buildResponse(this.getUserWithoutSocket(internalIdentifier));
         emitToSelf(socket, "registered-successfull", resp);
