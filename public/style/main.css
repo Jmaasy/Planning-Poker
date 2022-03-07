@@ -1,9 +1,12 @@
 * {
     font-family: "Avenir";
 
-    --primary: #B8405E;
+    /* --primary: #B8405E;
     --secondary: #313552;
-    --background: #313552;
+    --background: #313552; */
+    --primary: #FF8A80;
+    --secondary: #212121;
+    --background: #212121;
   }
 
   html {
@@ -242,6 +245,7 @@
     width: 300px;
     border: none;
     color: var(--primary);
+    background: #373737;
   }
 
   #user-name-continue {
@@ -263,7 +267,7 @@
 }
 
 .previous-votes-wrapper .gradient-fader {
-    background: linear-gradient(180deg, rgba(49,53,82,0) 21%, rgba(49,53,82,1) 75%);
+    background: linear-gradient(180deg, rgba(49,53,82,0) 21%, var(--background) 75%);
     position: absolute;
     top: 0;
     height: 100%;

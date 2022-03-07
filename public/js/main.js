@@ -1,5 +1,5 @@
-const url = "localhost:443/";
-// const url = "https://jeffreymaas.dev/";
+// const url = "localhost:443/";
+const url = "https://jeffreymaas.dev/";
 
 let socket = undefined;
 let votedValue = 1;
@@ -43,3 +43,16 @@ function vote(number) {
 function joinRoom(roomId) {
     socket.emit("join-room", roomId);
 }
+
+document.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+
+        // Scenario where registering
+        if(document.querySelector(".register-scene").getAttribute("hidden") == null) {
+            document.querySelector(".register-scene button").click();
+        }
+        
+        console.log("YEET");
+    }
+});

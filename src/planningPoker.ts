@@ -32,6 +32,8 @@ class PlanningPoker {
             const user = this.userHandler.getUserWithoutSocket(userId);
             if(user.roomId != null) {
                 this.roomHandler.removeUserFromRoom(userId, user.roomId);
+
+                Logger.LOG("ROOM", `Removed user(${user.name}) from room ${user.roomId}`);
                 if(this.roomHandler.getConnectedUserIds(user.roomId).length > 0) {
                     const sockets = this.getSocketsFromRoomId(user.roomId, [userId]);
                     const resp = buildResponse(user, false);
