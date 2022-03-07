@@ -65,7 +65,7 @@ function processVoteHistoryUpdate(event) {
         });
 
         const entries = new Map([...entriesDeserialized.entries()]);
-        const maxVoted = [...entriesDeserialized.entries()].map(x => Object.values(x[1])[0]).sort(function(a,b) { return b-a });
+        const maxVoted = [...entriesDeserialized.entries()].map(x => Object.values(x[1])[0]).sort(function(a,b) { return b-a })[0];
 
         historyWrapper.innerHTML += "<li>";
         entries.forEach((v,k) => {
