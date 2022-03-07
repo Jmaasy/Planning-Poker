@@ -64,12 +64,11 @@ function processVoteHistoryUpdate(event) {
             }
         });
 
-        const sorted = new Map([...entriesDeserialized.entries()].sort(function(a, b){return b-a}));
-        const maxVoted = Object.values(sorted.get(0))[0];
+        const entries = new Map([...entriesDeserialized.entries()]);
+        const maxVoted = [...entriesDeserialized.entries()].map(x => Object.values(x[1])[0]).sort(function(a,b) { return b-a });
 
         historyWrapper.innerHTML += "<li>";
-        sorted.forEach((v,k) => {
-            if(k < 4) {
+        entries.forEach((v,k) => {
                 const number = Object.keys(v)[0];
                 const amountVoted = Object.values(v)[0];
 
@@ -83,7 +82,6 @@ function processVoteHistoryUpdate(event) {
                         <span class="vote-percentage-bottom">${percentage}%</span>
                     </div>
                 `;
-            }  
         });
 
         historyWrapper.innerHTML += "</li>";
