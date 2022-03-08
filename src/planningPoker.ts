@@ -124,6 +124,8 @@ class PlanningPoker {
 
                     this.roomHandler.setState(user.roomId, RoomState.VOTED);
                 }, 4000);
+            } else {
+                Logger.WARN("Already received request to reveal votes, request will be ignored.");
             }
         }
     }
