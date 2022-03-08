@@ -13,7 +13,7 @@
     <div class="backdrop"></div>
     <div class="register-scene" hidden>
       <div class="scene-wrapper">
-        <input type="text" id="user-name-input" maxlength="12" placeholder="name"/>
+        <input type="text" id="user-name-input" maxlength="12" placeholder="name" autofocus/>
         <button onClick="connect()" id="user-name-continue">continue</button>
       </div>
     </div>
@@ -72,8 +72,8 @@
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-    <script src="js/main.js"></script>
     <script src="js/socket.js"></script>
+    <script src="js/main.js"></script>
     <script src="js/room.js"></script>
     <script src="js/vote.js"></script>
   </body>

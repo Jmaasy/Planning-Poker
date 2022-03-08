@@ -87,9 +87,9 @@ class PlanningPoker {
             const userId = this.userHandler.getIdentifier(clientId);
             const user = this.userHandler.getUserWithoutSocket(userId);
             
-            Logger.LOG("VOTE", `User ${user.name} has requested to reveal votes for room: ${user.roomId}`);
-
             if(this.roomHandler.getState(user.roomId) != RoomState.REVEAL) {
+                Logger.LOG("VOTE", `User ${user.name} has requested to reveal votes for room: ${user.roomId}`);
+
                 this.roomHandler.setState(user.roomId, RoomState.REVEAL);
                 const sockets = this.getSocketsFromRoomId(user.roomId, [userId]);
             
