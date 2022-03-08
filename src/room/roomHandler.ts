@@ -53,7 +53,7 @@ class RoomHandler {
                 votedDistribution.set(vote.number, number);
             });
             
-            if(this.rooms.get(roomId).voteHistory.length == 4) this.rooms.get(roomId).voteHistory.shift();
+            if(this.rooms.get(roomId).voteHistory.length == 4) this.rooms.get(roomId).voteHistory.pop();
             this.rooms.get(roomId).voteHistory.unshift(votedDistribution);
 
             return [...this.rooms.get(roomId).votes.values()];

@@ -1,5 +1,5 @@
-// const url = "localhost:443/";
-const url = "https://jeffreymaas.dev/";
+const url = "localhost:443/";
+// const url = "https://jeffreymaas.dev/";
 
 let socket = undefined;
 let votedValue = 1;
