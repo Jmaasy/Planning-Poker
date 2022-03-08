@@ -1,5 +1,6 @@
 enum RoomState {
     STARTING,
+    REVEAL,
     VOTED,
     RESET
 };

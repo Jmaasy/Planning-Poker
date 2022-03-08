@@ -9,7 +9,9 @@ function voteReset() {
         element.removeAttribute("disabled");
     });
 
-    document.querySelector(".voting-buttons .selected").classList = "";
+    if(document.querySelector(".voting-buttons .selected") != null) {
+        document.querySelector(".voting-buttons .selected").classList = "";
+    }
 
     document.querySelector(".pyc-center span.title").removeAttribute("hidden");
     document.querySelector(".pyc-center button.reset-cards").setAttribute("hidden", true);

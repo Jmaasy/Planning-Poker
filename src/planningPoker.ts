@@ -65,18 +65,16 @@ class PlanningPoker {
 
     resetVotes(socket: Socket, clientId: string) {
         if(this.userHandler.validateUser(clientId, socket)) {
-
             const userId = this.userHandler.getIdentifier(clientId);
             const user = this.userHandler.getUserWithoutSocket(userId);
-            
-            if(this.roomHandler.getState(user.roomId) == RoomState.VOTED) {
-                this.roomHandler.setState(user.roomId, RoomState.RESET);
-                return;
-            }
 
             Logger.LOG("VOTE", `User ${user.name} has requested to reset votes for room: ${user.roomId}`);
 
             this.roomHandler.resetVotes(user.roomId);
+            if(this.roomHandler.getState(user.roomId) == RoomState.VOTED) {
+                this.roomHandler.setState(user.roomId, RoomState.RESET);
+                return;
+            }
 
             const sockets = this.getSocketsFromRoomId(user.roomId, [userId]);
             const resp = buildResponse("");
@@ -86,44 +84,47 @@ class PlanningPoker {
 
     revealVotes(socket: Socket, clientId: string) {
         if(this.userHandler.validateUser(clientId, socket)) {
-
             const userId = this.userHandler.getIdentifier(clientId);
             const user = this.userHandler.getUserWithoutSocket(userId);
             
             Logger.LOG("VOTE", `User ${user.name} has requested to reveal votes for room: ${user.roomId}`);
 
-            const sockets = this.getSocketsFromRoomId(user.roomId, [userId]);
-            this.roomHandler.setState(user.roomId, RoomState.VOTED);
-        
-            setTimeout(_ => {
-                const resp = buildResponse(3);
-                emitToAll(sockets, socket, resp, "vote-reveal-countdown");
-            }, 1000);
+            if(this.roomHandler.getState(user.roomId) != RoomState.REVEAL) {
+                this.roomHandler.setState(user.roomId, RoomState.REVEAL);
+                const sockets = this.getSocketsFromRoomId(user.roomId, [userId]);
+            
+                setTimeout(_ => {
+                    const resp = buildResponse(3);
+                    emitToAll(sockets, socket, resp, "vote-reveal-countdown");
+                }, 1000);
 
-            setTimeout(_ => {
-                const resp = buildResponse(2);
-                emitToAll(sockets, socket, resp, "vote-reveal-countdown");
+                setTimeout(_ => {
+                    const resp = buildResponse(2);
+                    emitToAll(sockets, socket, resp, "vote-reveal-countdown");
 
-            }, 2000);
+                }, 2000);
 
-            setTimeout(_ => {
-                const resp = buildResponse(1);
-                emitToAll(sockets, socket, resp, "vote-reveal-countdown");
-            }, 3000);
+                setTimeout(_ => {
+                    const resp = buildResponse(1);
+                    emitToAll(sockets, socket, resp, "vote-reveal-countdown");
+                }, 3000);
 
-            setTimeout(_ => {
-                const votes = this.roomHandler.getVotes(user.roomId);
-                const resp = buildResponse(votes);
-                emitToAll(sockets, socket, resp, "vote-reveal-now");
+                setTimeout(_ => {
+                    const votes = this.roomHandler.getVotes(user.roomId);
+                    const resp = buildResponse(votes);
+                    emitToAll(sockets, socket, resp, "vote-reveal-now");
 
-                Logger.LOG("VOTE", `Sending updated vote history for room: ${user.roomId}`);
+                    Logger.LOG("VOTE", `Sending updated vote history for room: ${user.roomId}`);
 
-                const voteHistory = this.roomHandler.getVoteHistory(user.roomId);
-                const voteHistoryResponse = buildResponse(
-                    voteHistory.map(x => Array.from(x.entries()))
-                );
-                emitToAll(sockets, socket, voteHistoryResponse, "update-vote-history");
-            }, 4000);
+                    const voteHistory = this.roomHandler.getVoteHistory(user.roomId);
+                    const voteHistoryResponse = buildResponse(
+                        voteHistory.map(x => Array.from(x.entries()))
+                    );
+                    emitToAll(sockets, socket, voteHistoryResponse, "update-vote-history");
+
+                    this.roomHandler.setState(user.roomId, RoomState.VOTED);
+                }, 4000);
+            }
         }
     }
 
