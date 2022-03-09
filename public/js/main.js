@@ -67,4 +67,14 @@ document.addEventListener("keyup", function(event) {
 });
 
 document.querySelector("body").setAttribute("data-theme", theme);
+
+if(checked == null || checked == undefined) {
+    const theme = window.localStorage.getItem("theme");
+    if(theme == null) {
+        window.localStorage.setItem("theme", "dark");
+        theme = "dark";
+      }
+    checked = (theme == "dark") ? true: false;
+}
+
 if(checked) document.querySelector(".theme-toggle-input").setAttribute("checked", true);

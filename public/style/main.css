@@ -207,7 +207,7 @@ html, body {
   left: 50px;
   bottom: 0;
   margin: 37px;
-  color: #fff;
+  color: var(--text-color);
   opacity: .4;
   display: none;
 }
@@ -260,6 +260,7 @@ html, body {
 }
 
 .share-button path {
+  fill: var(--text-color);
   cursor: pointer;
 }
 
@@ -292,6 +293,10 @@ html, body {
   margin-left: -6px;
   background: var(--primary);
   color: #fff;
+}
+
+.username-wrapper {
+  text-align: center;
 }
 
 .previous-votes-wrapper {
