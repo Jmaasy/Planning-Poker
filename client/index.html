@@ -2,14 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>PlanningPoker</title>
     
     <link rel="stylesheet" type="text/css" href="style/main.css">
+    <script>
+      const theme = window.localStorage.getItem("theme");
+      if(theme == null) {
+        window.localStorage.setItem("theme", "dark");
+        theme = "dark";
+      }
+      const checked = (theme == "dark") ? true: false;
+    </script>
   </head>
   <body>
     <div class="logo">Planning<span>Poker</span></div>
+    <div class="theme-toggle">
+      <svg xml:space="preserve" width="512px" viewBox="0 0 512 512" version="1.1" id="Layer_1" height="512px" enable-background="new 0 0 512 512" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><path d="M248.082,263.932c-31.52-31.542-39.979-77.104-26.02-116.542c-15.25,5.395-29.668,13.833-41.854,26.02  c-43.751,43.75-43.751,114.667,0,158.395c43.729,43.73,114.625,43.752,158.374,0c12.229-12.186,20.646-26.604,26.021-41.854  C325.188,303.91,279.604,295.451,248.082,263.932z"/></svg>        
+      <label class="switch">
+        <input type="checkbox" name="theme-toggle" class="theme-toggle-input" onchange="setTheme()">
+        <span class="slider round"></span>
+      </label>
+      <svg xml:space="preserve" viewBox="0 0 16 16" version="1.1" style="enable-background:new 0 0 16 16;" id="Layer_1_1_" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><circle cx="8.5" cy="7.5" r="4.5"/><rect height="2" width="1" x="8"/><rect height="2" width="1" x="8" y="13"/><rect height="1" width="2" x="14" y="7"/><rect height="1" width="2" x="1" y="7"/><rect height="2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -4.7175 12.8033)" width="1" x="12.596" y="11.096"/><rect height="2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -0.9099 3.6109)" width="1" x="3.404" y="1.904"/><rect height="1" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -7.4099 6.3033)" width="2" x="2.904" y="11.596"/><rect height="1" transform="matrix(0.7071 -0.7071 0.7071 0.7071 1.7823 10.1107)" width="2" x="12.096" y="2.404"/></svg>
+    </div>
     <div class="backdrop"></div>
     <div class="register-scene" hidden>
       <div class="scene-wrapper">

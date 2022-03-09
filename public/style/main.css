@@ -18,9 +18,24 @@
 
 * {
   font-family: "Avenir";
+}
+
+[data-theme="dark"] {
   --primary: #FF8A80;
   --secondary: #212121;
   --background: #212121;
+  --input-background: #373737;
+  --input-color: #FF8A80;
+  --text-color: #cfcfcf;
+}
+
+[data-theme="light"] {
+  --primary: #FF8A80;
+  --secondary: #f5f5f5;
+  --background: #212121;
+  --input-background: #cfcfcf;
+  --input-color: #212121;
+  --text-color: #212121;
 }
 
 html {
@@ -52,13 +67,15 @@ html, body {
   right: 0;
   margin: auto;
   width: fit-content;
+  z-index: 100;
+  text-align: center;
 }
 
 .voting-buttons button {
   border-radius: 6px;
   padding: 22px 0px;
   width: 47px;
-  margin: 0 5px;
+  margin: 0 5px 10px;
   background: unset;
   border: 2px solid var(--primary);
   color: var(--primary);
@@ -171,7 +188,7 @@ html, body {
 .pyc-center button {
   border: none;
   padding: 10px 40px;
-  background: var(--secondary);
+  background: var(--background);
   color: #fff;
   border-radius: 6px;
   position: absolute;
@@ -192,6 +209,7 @@ html, body {
   margin: 37px;
   color: #fff;
   opacity: .4;
+  display: none;
 }
 
 .lower-users, .upper-users {
@@ -206,11 +224,11 @@ html, body {
 
 .lower-users .card.selected .number, .upper-users .card.selected .number, .voting-buttons button.selected {
   background: var(--primary);
-  color: #fff;
+  color: var(--text-color);
 }
 
 .lower-users .card span:last-child, .upper-users .card span:first-child {
-  color: #fff;
+  color: var(--text-color);
 }
 
 .lower-users .card span:first-child, .upper-users .card span:last-child {
@@ -234,6 +252,7 @@ html, body {
   left: 0;
   margin: 30px;
   opacity: .5;
+  display: none;
 }
 
 .share-button:hover {
@@ -244,8 +263,15 @@ html, body {
   cursor: pointer;
 }
 
+[data-theme="light"] .backdrop {
+  background: url("../images/goat_light.png");
+}
+
+[data-theme="dark"] .backdrop {
+  background: url("../images/goat_dark.png");
+}
+
 .backdrop {
-  background: url("../images/goat.png");
   width: 100%;
   height: 100%;
   position: absolute;
@@ -256,8 +282,8 @@ html, body {
   padding: 10px;
   width: 300px;
   border: none;
-  color: var(--primary);
-  background: #373737;
+  color: var(--input-color);
+  background: var(--input-background);
 }
 
 #user-name-continue {
@@ -269,6 +295,7 @@ html, body {
 }
 
 .previous-votes-wrapper {
+  display: none;
   position: absolute;
   right: 30px;
   top: 30px;
@@ -279,6 +306,14 @@ html, body {
   clip: rect(0px,1000000px,20000px,0px);
 }
 
+[data-theme="light"] .previous-votes-wrapper .gradient-fader {
+  background: url("../images/goat_light.png");
+}
+
+[data-theme="dark"] .previous-votes-wrapper .gradient-fader {
+  background: url("../images/goat_dark.png");
+}
+
 .previous-votes-wrapper .gradient-fader {
   position: fixed;
   top: 0;
@@ -287,7 +322,6 @@ html, body {
   width: 100%;
   z-index: 100;
   display: block;
-  background: url(../images/goat.png);
   -webkit-mask-image: url(../images/mask_image.png);
   -webkit-mask-size: cover;
   mask-image: url(../images/mask_image.png);
@@ -315,7 +349,7 @@ html, body {
 
 .block-entry {
   width: 50px;
-  color: #fff;
+  color: var(--text-color);
   display: inline-block;
 }
 
@@ -347,8 +381,102 @@ html, body {
   width: 100%;
   height: 60%;
   position: absolute;
-  background: rgb(184,64,94);
+  background: var(--primary);
   background: linear-gradient(180deg, rgb(255 138 128 / 24%) 0%, rgba(184,64,94,0) 74%);
   top: 0;
   z-index: -1;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 75px;
+  left: 30px;
+  z-index: 4;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  vertical-align: top;
+  margin-left: 41px;
+}
+
+.theme-toggle svg:not(:first-of-type) {
+  height: 25px;
+  right: -29px;
+  fill: var(--text-color);
+}
+
+.theme-toggle svg:first-of-type {
+  width: 44px;
+  fill: var(--text-color);
+  height: 44px;
+  position: absolute;
+  top: -11px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid var(--primary);
+  background-color: var(--secondary);
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 15px;
+  width: 15px;
+  left: 3px;
+  top: 3px;
+  background-color: var(--primary);
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--primary);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--primary);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+  background: var(--secondary);
+  left: unset;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+@media only screen and (min-width: 1029px) {
+  .previous-votes-wrapper, .share-button, .room-identifier {
+    display: block !important;
+  }
 }

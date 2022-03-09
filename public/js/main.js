@@ -44,6 +44,15 @@ function joinRoom(roomId) {
     socket.emit("join-room", roomId);
 }
 
+function setTheme() {
+    const checked = document.querySelector("input.theme-toggle-input").checked;
+    const value = (checked) ? "dark" : "light" ;
+    window.localStorage.setItem("theme", value);
+
+    console.log(value);
+    document.querySelector("body").setAttribute("data-theme", value);
+}
+
 document.addEventListener("keyup", function(event) {
     if (event.key === "Enter") {
         event.preventDefault();
@@ -56,3 +65,6 @@ document.addEventListener("keyup", function(event) {
         console.log("YEET");
     }
 });
+
+document.querySelector("body").setAttribute("data-theme", theme);
+if(checked) document.querySelector(".theme-toggle-input").setAttribute("checked", true);
