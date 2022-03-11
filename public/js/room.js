@@ -13,8 +13,6 @@ function processRoomJoinedEmit(event) {
             document.querySelector(".pyc-center button").removeAttribute("hidden");
         }
 
-        console.log(connectedUserData);
-
         if(connectedUserData.user.clientId != event.content.self.clientId) {
             const direction = (document.querySelectorAll(".lower-users .card").length > document.querySelectorAll(".upper-users .card").length) ? "upper" : "lower";
             const spectatorHtml = (connectedUserData.user.spectator) ? "<img src='images/spectator.svg'>" : "" ;
@@ -79,7 +77,8 @@ function roomCreated(event) {
     document.querySelector(`.card[data-id='${event.content.clientId}'] .number`).innerHTML += spectatorHtml;
     
     document.querySelector(".room-scene").removeAttribute("hidden");
-    if(!event.connected.spectator) document.querySelector(".voting-buttons").removeAttribute("hidden");
+    if(!event.content.spectator) document.querySelector(".voting-buttons").removeAttribute("hidden");
+    else document.querySelector(".title").innerHTML = "Wait for cards to be picked.";
     document.querySelector(".create-scene").setAttribute("hidden", true);
     document.querySelector(".register-scene").setAttribute("hidden", true);
 
