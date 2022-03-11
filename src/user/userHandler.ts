@@ -1,6 +1,6 @@
-import User from "./user";
 import UserValidator from "./userValidator";
-import { Socket, Server } from 'socket.io';
+import { User, RegisterUserData } from "./user";
+import { Socket } from 'socket.io';
 import { buildResponse, emitToSelf } from "../response";
 import Logger from "../logger";
 
@@ -8,19 +8,20 @@ class UserHandler {
     private userValidator = new UserValidator();
     private usersConnected: Map<string, User> = new Map();
 
-    createUser(socket: Socket, clientId: string, name: string) {
+    createUser(socket: Socket, clientId: string, userData: RegisterUserData) {
         const internalIdentifier = this.userValidator.getIdentifier(clientId);
         this.usersConnected.set(
             internalIdentifier, 
             {
                 clientId: clientId,
-                name: name,
+                name: userData.name,
                 roomId: null,
+                spectator: userData.spectator,
                 socket: socket
             }
         );
-
-        Logger.LOG("USER", `Created user ${name}(${clientId})`);
+            
+        Logger.LOG("USER", `Created ${(userData.spectator) ? "spectator" : "user"} ${userData.name}(${clientId})`);
 
         const resp = buildResponse(this.getUserWithoutSocket(internalIdentifier));
         emitToSelf(socket, "registered-successfull", resp);

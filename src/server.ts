@@ -8,16 +8,17 @@ import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import PlanningPoker from './planningPoker';
 import Logger from './logger';
+import { RegisterUserData } from './user/user';
 
 const env = dotenv.config();
 const port = 443;
 const planningPoker = new PlanningPoker();
 const app = express()
-// const server = https.createServer({
-//   cert: fs.readFileSync(process.env.CRT),
-//   key: fs.readFileSync(process.env.KEY)
-// }, app);
-const server = http.createServer(app);
+const server = https.createServer({
+  cert: fs.readFileSync(process.env.CRT),
+  key: fs.readFileSync(process.env.KEY)
+}, app);
+// const server = http.createServer(app);
 const io = new socketio.Server();
 
 app.use(cors());
@@ -28,7 +29,7 @@ app.get("/*", (req: any, res: any) => {
 
 io.attach(server, { cors: { origin: '*' }, allowEIO3: true });
 io.on('connection', (socket) => {
-  socket.on("create-user", (name: string) => planningPoker.userHandler.createUser(socket, socket.id, name))
+  socket.on("create-user", (userData: RegisterUserData) => planningPoker.userHandler.createUser(socket, socket.id, userData))
   socket.on("create-room", _ => planningPoker.createRoom(socket, socket.id, "lol"));
   socket.on("join-room", (roomId: string) => planningPoker.joinRoom(socket, socket.id, roomId));
   socket.on("vote", (number: string) => planningPoker.vote(socket, socket.id, number));
