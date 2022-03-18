@@ -64,11 +64,13 @@ function joinRoomNotSuccessful(event) {
 }
 
 function joinRoomSuccessful(event) {
-    id = event.content.clientId;
+    const spectatorHtml = (event.content.spectator) ? "<img src='images/spectator.svg'>" : "" ;
 
     document.querySelector(".register-scene").setAttribute("hidden", true);
     document.querySelector(".username-wrapper").removeAttribute("hidden");
     document.querySelector(".username-wrapper").innerHTML = "Welcome " + event.content.name;
+
+    document.querySelector(".card[data-id='tbs'] .number").innerHTML = spectatorHtml;
     document.querySelector(".card[data-id='tbs']").setAttribute("data-id", event.content.clientId)
 }
 
