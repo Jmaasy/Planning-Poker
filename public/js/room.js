@@ -66,6 +66,8 @@ function joinRoomNotSuccessful(event) {
 function joinRoomSuccessful(event) {
     const spectatorHtml = (event.content.spectator) ? "<img src='images/spectator.svg'>" : "" ;
 
+    id = event.content.clientId;
+
     document.querySelector(".register-scene").setAttribute("hidden", true);
     document.querySelector(".username-wrapper").removeAttribute("hidden");
     document.querySelector(".username-wrapper").innerHTML = "Welcome " + event.content.name;

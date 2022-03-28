@@ -48,7 +48,9 @@ function voted(event) {
     document.querySelector(".pyc-center span.title").setAttribute("hidden", true);
 
     if(!countDown) document.querySelector(".pyc-center button.reveal-cards").removeAttribute("hidden");
-    
+
+    console.log(event.content);
+
     if(event.content.clientId == id) {
         document.querySelector(`button[data-vote='${oldVotedValue}']`).classList = "";
         document.querySelector(`button[data-vote='${votedValue}']`).classList = "selected";
@@ -65,6 +67,24 @@ function processVoteHistoryUpdate(event) {
                 [x[1][0]]: x[1][1]
             }
         });
+
+        console.log(entriesDeserialized);
+
+        if(entriesDeserialized.length == 1) {
+            document.querySelector("#canvas").removeAttribute("hidden");
+            animate = true;
+            timerTotal = 10;
+
+            requestAnimFrame( loop );
+            setTimeout(_ => {
+                timerTotal = 10000;
+            }, 5000);
+
+            setTimeout(_ => {
+                document.querySelector("#canvas").setAttribute("hidden", true);
+                animate = false;
+            }, 7500)
+        }
 
         const entries = new Map([...entriesDeserialized.entries()]);
         const maxVoted = [...entriesDeserialized.entries()].map(x => Object.values(x[1])[0]).sort(function(a,b) { return b-a })[0];
