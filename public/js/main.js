@@ -1,5 +1,5 @@
-// const url = "localhost:443/";
-const url = "https://jeffreymaas.dev/";
+const url = "localhost:443/";
+// const url = "https://jeffreymaas.dev/";
 
 let socket = undefined;
 let votedValue = 1;
@@ -18,13 +18,7 @@ if(window.location.search.replace("?username=", '') != '') {
 }
 
 function copyRoomLink() {
-    const positioning = document.querySelector(".share-button").getBoundingClientRect();
-    document.querySelector("body").innerHTML += `
-        <div class="tooltip" style='top: calc(${positioning.top}px - 18px); left: calc(${positioning.left}px + 18px);'>
-            PlanningPoker link has been copied to your clipboard.
-        </div>
-    `;
-
+    document.querySelector(".tooltip").removeAttribute("hidden");
     const el = document.querySelector(".room-identifier .room-id");
     navigator.clipboard.writeText(`${url}${el.innerHTML}`);
 
@@ -32,7 +26,7 @@ function copyRoomLink() {
         document.querySelector(".tooltip").classList += " fadeout";
 
         setTimeout(_ => {
-            document.querySelector(".tooltip").remove();
+            document.querySelector(".tooltip").setAttribute("hidden", true);
         }, 2000);
     }, 1000);
 }
@@ -43,10 +37,6 @@ function revealCards() {
 
 function resetCards() {
     socket.emit("reset-votes");
-}
-
-function createRoom() {
-    socket.emit("create-room");
 }
 
 function vote(number) {
@@ -62,6 +52,13 @@ function joinRoom(roomId) {
 function setTheme() {
     const checked = document.querySelector("input.theme-toggle-input").checked;
     const value = (!checked) ? "dark" : "light" ;
+
+    const backgrounds = ["goat", "zebra", "eiffel"];
+    const selected = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+    const suffix = (value == "dark") ? "b" : "w";
+
+    document.querySelector(".backdrop").style.background = `url(../images/${selected}_${suffix}.png)`;
+
     window.localStorage.setItem("theme", value);
     document.querySelector("body").setAttribute("data-theme", value);
 }
@@ -89,4 +86,10 @@ if(checked == null || checked == undefined) {
 }
 
 document.querySelector("body").setAttribute("data-theme", theme);
+
+const backgrounds = ["goat", "zebra", "eiffel"];
+const selected = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+const suffix = (theme == "dark") ? "b" : "w";
+
+document.querySelector(".backdrop").style.background = `url(../images/${selected}_${suffix}.png)`;
 if(!checked) document.querySelector(".theme-toggle-input").setAttribute("checked", true);

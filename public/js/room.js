@@ -1,8 +1,11 @@
 function processRoomJoinedEmit(event) {
     document.querySelector(".room-scene").removeAttribute("hidden");
-    document.querySelector(".create-scene").setAttribute("hidden", true);
-    document.querySelector(".join-scene").setAttribute("hidden", true);
+    document.querySelector(".room-identifier").removeAttribute("hidden");
+    document.querySelector(".share-link").removeAttribute("hidden");
     document.querySelector(".register-scene").setAttribute("hidden", true);
+
+    console.log(event);
+
     if(!event.content.self.spectator) document.querySelector(".voting-buttons").removeAttribute("hidden");
 
     event.content.connected.forEach(connectedUserData => {
@@ -69,22 +72,25 @@ function joinRoomSuccessful(event) {
     id = event.content.clientId;
 
     document.querySelector(".register-scene").setAttribute("hidden", true);
-    document.querySelector(".username-wrapper").removeAttribute("hidden");
-    document.querySelector(".username-wrapper").innerHTML = "Welcome " + event.content.name;
-
     document.querySelector(".card[data-id='tbs'] .number").innerHTML = spectatorHtml;
-    document.querySelector(".card[data-id='tbs']").setAttribute("data-id", event.content.clientId)
+    document.querySelector(".card[data-id='tbs']").setAttribute("data-id", event.content.clientId);
+    console.log(event);
+    if(window.location.pathname.replace("/", "") == '') {
+        socket.emit("create-room");
+    }
 }
 
 function roomCreated(event) {
     const spectatorHtml = (event.content.spectator) ? "<img src='images/spectator.svg'>" : "" ;
-    document.querySelector(`.card[data-id='${event.content.clientId}'] .number`).innerHTML += spectatorHtml;
+    document.querySelector(`.card[data-id='${event.content.clientId}'] .number`).innerHTML = spectatorHtml;
     
     document.querySelector(".room-scene").removeAttribute("hidden");
+    document.querySelector(".room-identifier").removeAttribute("hidden");
+    document.querySelector(".share-link").removeAttribute("hidden");
+
     if(!event.content.spectator) document.querySelector(".voting-buttons").removeAttribute("hidden");
     else document.querySelector(".title").innerHTML = "Wait for cards to be picked.";
-    document.querySelector(".create-scene").setAttribute("hidden", true);
+    
     document.querySelector(".register-scene").setAttribute("hidden", true);
-
     document.querySelector(".room-id").innerHTML = event.content.roomId;
 }

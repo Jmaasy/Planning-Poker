@@ -45,9 +45,7 @@ function connect(queryName = undefined) {
       socket.on("update-vote-history", event => processVoteHistoryUpdate(event));
 
       if(window.location.pathname.replace("/", "") == '') {
-          document.querySelector(".create-scene").removeAttribute("hidden");
       } else {
-          document.querySelector(".join-scene").removeAttribute("hidden");
           joinRoom(window.location.pathname.replace("/", ""));
       }
     }

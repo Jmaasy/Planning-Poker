@@ -22,8 +22,10 @@
 
 [data-theme="dark"] {
   --primary: #FF8A80;
+  --alternative: #e27a71;
   --secondary: #212121;
   --background: #212121;
+  --background-800: #191919;
   --input-background: #373737;
   --input-color: #FF8A80;
   --text-color: #cfcfcf;
@@ -31,8 +33,10 @@
 
 [data-theme="light"] {
   --primary: #FF8A80;
+  --alternative: #e27a71;
   --secondary: #f5f5f5;
   --background: #212121;
+  --background-800: #f5f5f5;
   --input-background: #cfcfcf;
   --input-color: #212121;
   --text-color: #212121;
@@ -142,24 +146,15 @@ html, body {
   height: max-content;
 }
 
-.register-scene, .create-scene, .join-scene, .room-scene {
+.register-scene .scene-wrapper {
+  min-width: 350px;
+  padding: 20px;
+  background: var(--background-800);
+}
+
+.register-scene, .join-scene, .room-scene {
   height: calc(100% - 120px);
   position: relative;
-}
-
-.create-scene span {
-  font-size: 1.4em;
-  color: var(--primary);
-  display: block;
-}
-
-.create-scene button {
-  padding: 10px 48px;
-  border: none;
-  background: var(--primary);
-  color: var(--background);
-  margin-top: 12px;
-  cursor: pointer;
 }
 
 .pyc-center {
@@ -204,12 +199,14 @@ html, body {
 
 .room-identifier {
   position: absolute;
-  left: 50px;
-  bottom: 0;
-  margin: 37px;
+  left: 30px;
+  bottom: 30px;
   color: var(--text-color);
-  opacity: .4;
-  display: none;
+}
+
+.room-id {
+  display: block;
+  color: var(--primary);
 }
 
 .lower-users, .upper-users {
@@ -288,18 +285,19 @@ html, body {
 
 #user-name-input {
   padding: 10px;
-  width: 300px;
   border: none;
-  color: var(--input-color);
+  margin: 0;
   background: var(--input-background);
+  color: var(--primary);
+  width: calc(100% - 20px);
 }
 
 #user-name-continue {
   padding: 10px;
   border: none;
-  margin-left: -6px;
   background: var(--primary);
   color: var(--background);
+  width: 100%;
 }
 
 .username-wrapper {
@@ -307,7 +305,6 @@ html, body {
 }
 
 .previous-votes-wrapper {
-  display: none;
   position: absolute;
   right: 30px;
   top: 30px;
@@ -316,6 +313,13 @@ html, body {
   height: calc(100% - 40px);
   overflow: hidden;
   clip: rect(0px,1000000px,20000px,0px);
+}
+
+.average-value {
+  padding: 20px 20px 0 20px;
+  width: calc(100% - 40px);
+  text-align: center;
+  color: var(--text-color);
 }
 
 [data-theme="light"] .previous-votes-wrapper .gradient-fader {
@@ -400,31 +404,35 @@ html, body {
 }
 
 .theme-toggle {
-  position: absolute;
-  top: 75px;
-  left: 30px;
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  margin-top: 8px;
+  margin-left: -4px;
   z-index: 4;
 }
 
 .switch {
   position: relative;
   display: inline-block;
-  width: 48px;
-  height: 24px;
+  width: 40px;
+  height: 20px;
   vertical-align: top;
   margin-left: 41px;
 }
 
 .theme-toggle svg:not(:first-of-type) {
   height: 25px;
-  right: -29px;
+  position: absolute;
+  right: -34px;
+  top: -2px;
   fill: var(--text-color);
 }
 
 .theme-toggle svg:first-of-type {
-  width: 44px;
+  width: 40px;
   fill: var(--text-color);
-  height: 44px;
+  height: 40px;
   position: absolute;
   top: -11px;
 }
@@ -453,10 +461,10 @@ html, body {
 .slider:before {
   position: absolute;
   content: "";
-  height: 15px;
-  width: 15px;
-  left: 3px;
-  top: 3px;
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  top: 2px;
   background-color: var(--primary);
   -webkit-transition: .4s;
   transition: .4s;
@@ -475,7 +483,7 @@ input:checked + .slider:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
   background: var(--secondary);
-  left: unset;
+  left: -5px;
 }
 
 /* Rounded sliders */
@@ -487,20 +495,16 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-@media only screen and (min-width: 1029px) {
-  .previous-votes-wrapper, .share-button, .room-identifier {
-    display: block !important;
-  }
-}
-
 .tooltip {
-  z-index: 1;
+  z-index: 200;
   position: absolute;
   width: max-content;
   background: var(--primary);
   padding: 10px;
   border-radius: 5px;
   opacity: .8;
+  bottom: 30px;
+  left: 30px;
 }
 
 .tooltip.fadeout {
@@ -523,15 +527,14 @@ input:checked + .slider:before {
   display: block;
   position: relative;
   padding-left: 35px;
-  margin-bottom: 12px;
+  margin-bottom: -4px;
+  margin-top: 8px;
   cursor: pointer;
   font-size: 17px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-
-  margin-top: 10px;
   color: var(--text-color);
   font-size: 14px;
   height: 25px;
@@ -550,7 +553,6 @@ input:checked + .slider:before {
 
 .checkcontainer input:checked ~ .checkmark:after {
   display: block;
-  background: var(--background);
 }
 
 .checkcontainer input:checked ~ .checkmark {
@@ -582,4 +584,78 @@ canvas {
   height: 100%;
   width: 100%;
   background: transparent;
+}
+
+.top-header {
+  position: absolute;
+  margin: 30px;
+  z-index: 100;
+}
+
+.top-header__container {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.top-header__container > div {
+  position: relative;
+}
+
+.top-header__container h2 {
+  margin: 0;
+  padding: 0 0 0 5px;
+  color: var(--primary);
+  font-weight: lighter;
+  font-size: 34px;
+  letter-spacing: 2px;
+}
+
+.top-header__container h2 span {
+  color: var(--alternative);
+  font-weight: bold;
+}
+
+.share-link {
+  display: inline-block;
+  margin-left: 48px;
+  position: absolute;
+  top: 8px;
+  cursor: pointer;
+  width: max-content;
+}
+
+.share-link[hidden] {
+  display: none;
+}
+
+.share-link svg path {
+  fill: var(--text-color);
+}
+
+.share-link span {
+  position: absolute;
+  padding-top: 2px;
+  margin-left: 5px;
+  width: max-content;
+  color: var(--text-color);
+}
+
+.share-link:hover svg path {
+  fill: var(--primary);
+}
+
+.share-link:hover span {
+  color: var(--primary);
+}
+
+@media (max-width:1369px) {
+  .room-identifier {
+    display: none;
+  }
+}
+
+@media (max-width:1049px) {
+  .previous-votes-wrapper {
+    display: none;
+  }
 }

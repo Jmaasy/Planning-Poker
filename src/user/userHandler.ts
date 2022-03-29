@@ -37,7 +37,7 @@ class UserHandler {
     getSockets(userIds: string[], filter: string[]): Socket[] {
         return userIds
             .filter(id => !filter.includes(id))
-            .map(userId => this.getUserById(userId).socket)
+            .map(userId => this.getUserById(userId).socket);
     }
 
     getIdentifier(clientId: string) {

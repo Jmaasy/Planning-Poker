@@ -1,205 +1,130 @@
-let animate = false;
+var maxParticleCount = 150; //set max confetti count
+var particleSpeed = 2; //set the particle animation speed
+var startConfetti; //call to start confetti animation
+var stopConfetti; //call to stop adding confetti
+var toggleConfetti; //call to start or stop the confetti animation depending on whether it's already running
+var removeConfetti; //call to stop the confetti animation and remove all confetti immediately
 
-window.requestAnimFrame = ( function() {
-	return window.requestAnimationFrame ||
-           window.webkitRequestAnimationFrame ||
-           window.mozRequestAnimationFrame ||
-           function( callback ) {
-               window.setTimeout( callback, 1000 / 60 );
-           };
+(function() {
+	startConfetti = startConfettiInner;
+	stopConfetti = stopConfettiInner;
+	toggleConfetti = toggleConfettiInner;
+	removeConfetti = removeConfettiInner;
+	var colors = ["DodgerBlue", "OliveDrab", "Gold", "Pink", "SlateBlue", "LightBlue", "Violet", "PaleGreen", "SteelBlue", "SandyBrown", "Chocolate", "Crimson"]
+	var streamingConfetti = false;
+	var animationTimer = null;
+	var particles = [];
+	var waveAngle = 0;
+	
+	function resetParticle(particle, width, height) {
+		particle.color = colors[(Math.random() * colors.length) | 0];
+		particle.x = Math.random() * width;
+		particle.y = Math.random() * height - height;
+		particle.diameter = Math.random() * 10 + 5;
+		particle.tilt = Math.random() * 10 - 10;
+		particle.tiltAngleIncrement = Math.random() * 0.07 + 0.05;
+		particle.tiltAngle = 0;
+		return particle;
+	}
+
+	function startConfettiInner() {
+		var width = window.innerWidth;
+		var height = window.innerHeight;
+		window.requestAnimFrame = (function() {
+			return window.requestAnimationFrame ||
+				window.webkitRequestAnimationFrame ||
+				window.mozRequestAnimationFrame ||
+				window.oRequestAnimationFrame ||
+				window.msRequestAnimationFrame ||
+				function (callback) {
+					return window.setTimeout(callback, 16.6666667);
+				};
+		})();
+		var canvas = document.getElementById("confetti-canvas");
+		if (canvas === null) {
+			canvas = document.createElement("canvas");
+			canvas.setAttribute("id", "confetti-canvas");
+			canvas.setAttribute("style", "display:block;z-index:999999;pointer-events:none");
+			document.body.appendChild(canvas);
+			canvas.width = width;
+			canvas.height = height;
+			window.addEventListener("resize", function() {
+				canvas.width = window.innerWidth;
+				canvas.height = window.innerHeight;
+			}, true);
+		}
+		var context = canvas.getContext("2d");
+		while (particles.length < maxParticleCount)
+			particles.push(resetParticle({}, width, height));
+		streamingConfetti = true;
+		if (animationTimer === null) {
+			(function runAnimation() {
+				context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+				if (particles.length === 0)
+					animationTimer = null;
+				else {
+					updateParticles();
+					drawParticles(context);
+					animationTimer = requestAnimFrame(runAnimation);
+				}
+			})();
+		}
+	}
+
+	function stopConfettiInner() {
+		streamingConfetti = false;
+	}
+
+	function removeConfettiInner() {
+		stopConfetti();
+		particles = [];
+	}
+
+	function toggleConfettiInner() {
+		if (streamingConfetti)
+			stopConfettiInner();
+		else
+			startConfettiInner();
+	}
+
+	function drawParticles(context) {
+		var particle;
+		var x;
+		for (var i = 0; i < particles.length; i++) {
+			particle = particles[i];
+			context.beginPath();
+			context.lineWidth = particle.diameter;
+			context.strokeStyle = particle.color;
+			x = particle.x + particle.tilt;
+			context.moveTo(x + particle.diameter / 2, particle.y);
+			context.lineTo(x, particle.y + particle.tilt + particle.diameter / 2);
+			context.stroke();
+		}
+	}
+
+	function updateParticles() {
+		var width = window.innerWidth;
+		var height = window.innerHeight;
+		var particle;
+		waveAngle += 0.01;
+		for (var i = 0; i < particles.length; i++) {
+			particle = particles[i];
+			if (!streamingConfetti && particle.y < -15)
+				particle.y = height + 100;
+			else {
+				particle.tiltAngle += particle.tiltAngleIncrement;
+				particle.x += Math.sin(waveAngle);
+				particle.y += (Math.cos(waveAngle) + particle.diameter + particleSpeed) * 0.5;
+				particle.tilt = Math.sin(particle.tiltAngle) * 15;
+			}
+			if (particle.x > width + 20 || particle.x < -20 || particle.y > height) {
+				if (streamingConfetti && particles.length <= maxParticleCount)
+					resetParticle(particle, width, height);
+				else {
+					particles.splice(i, 1);
+					i--;
+				}
+			}
+		}
+	}
 })();
-
-var canvas = document.getElementById( 'canvas' ),
-    ctx = canvas.getContext( '2d' ),
-    cw = window.innerWidth,
-    ch = window.innerHeight,
-    fireworks = [],
-    particles = [],
-    hue = 120,
-    limiterTotal = 5,
-    limiterTick = 0,
-    timerTotal = 6,
-    timerTick = 0,
-    mousedown = false,
-    mx,
-    my;	
-    canvas.width = cw;
-    canvas.height = ch;
-
-function random( min, max ) {
-	return Math.random() * ( max - min ) + min;
-}
-
-function calculateDistance( p1x, p1y, p2x, p2y ) {
-	var xDistance = p1x - p2x,
-        yDistance = p1y - p2y;
-	return Math.sqrt( Math.pow( xDistance, 2 ) + Math.pow( yDistance, 2 ) );
-}
-
-function Firework( sx, sy, tx, ty ) {
-	this.x = sx;
-	this.y = sy;
-	this.sx = sx;
-	this.sy = sy;
-	this.tx = tx;
-	this.ty = ty;
-	this.distanceToTarget = calculateDistance( sx, sy, tx, ty );
-	this.distanceTraveled = 0;
-	this.coordinates = [];
-	this.coordinateCount = 3;
-
-    while( this.coordinateCount-- ) {
-		this.coordinates.push( [ this.x, this.y ] );
-	}
-
-	this.angle = Math.atan2( ty - sy, tx - sx );
-	this.speed = 2;
-	this.acceleration = 1.05;
-	this.brightness = random( 50, 70 );
-	this.targetRadius = 1;
-}
-
-Firework.prototype.update = function( index ) {
-	this.coordinates.pop();
-	this.coordinates.unshift( [ this.x, this.y ] );
-	
-	if( this.targetRadius < 8 ) {
-		this.targetRadius += 0.3;
-	} else {
-		this.targetRadius = 1;
-	}
-	
-	this.speed *= this.acceleration;
-	
-	var vx = Math.cos( this.angle ) * this.speed,
-        vy = Math.sin( this.angle ) * this.speed;
-	this.distanceTraveled = calculateDistance( this.sx, this.sy, this.x + vx, this.y + vy );
-	
-	if( this.distanceTraveled >= this.distanceToTarget ) {
-		createParticles( this.tx, this.ty );
-		fireworks.splice( index, 1 );
-	} else {
-		this.x += vx;
-		this.y += vy;
-	}
-}
-
-Firework.prototype.draw = function() {
-	ctx.beginPath();
-	ctx.moveTo( this.coordinates[ this.coordinates.length - 1][ 0 ], this.coordinates[ this.coordinates.length - 1][ 1 ] );
-	ctx.lineTo( this.x, this.y );
-	ctx.strokeStyle = 'hsl(' + hue + ', 100%, ' + this.brightness + '%)';
-	ctx.stroke();
-	
-	ctx.beginPath();
-	ctx.arc( this.tx, this.ty, this.targetRadius, 0, Math.PI * 2 );
-	ctx.stroke();
-}
-
-function Particle( x, y ) {
-	this.x = x;
-	this.y = y;
-	this.coordinates = [];
-	this.coordinateCount = 5;
-	
-    while( this.coordinateCount-- ) {
-		this.coordinates.push( [ this.x, this.y ] );
-	}
-
-    this.angle = random( 0, Math.PI * 2 );
-	this.speed = random( 1, 10 );
-	this.friction = 0.95;
-	this.gravity = 1;
-	this.hue = random( hue - 50, hue + 50 );
-	this.brightness = random( 50, 80 );
-	this.alpha = 1;
-	this.decay = random( 0.015, 0.03 );
-}
-
-Particle.prototype.update = function( index ) {
-	this.coordinates.pop();
-	this.coordinates.unshift( [ this.x, this.y ] );
-	this.speed *= this.friction;
-	this.x += Math.cos( this.angle ) * this.speed;
-	this.y += Math.sin( this.angle ) * this.speed + this.gravity;
-	this.alpha -= this.decay;
-	
-	if( this.alpha <= this.decay ) {
-		particles.splice( index, 1 );
-	}
-}
-
-Particle.prototype.draw = function() {
-	ctx. beginPath();
-	ctx.moveTo( this.coordinates[ this.coordinates.length - 1 ][ 0 ], this.coordinates[ this.coordinates.length - 1 ][ 1 ] );
-	ctx.lineTo( this.x, this.y );
-	ctx.strokeStyle = 'hsla(' + this.hue + ', 100%, ' + this.brightness + '%, ' + this.alpha + ')';
-	ctx.stroke();
-}
-
-function createParticles( x, y ) {
-	var particleCount = 30;
-	while( particleCount-- ) {
-		particles.push( new Particle( x, y ) );
-	}
-}
-
-function loop() {
-    if(animate) {
-        requestAnimFrame( loop );
-    }
-    
-    hue= random(0, 360 );
-	
-	ctx.globalCompositeOperation = 'destination-out';
-	ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-	ctx.fillRect( 0, 0, cw, ch );
-	ctx.globalCompositeOperation = 'lighter';
-
-	var i = fireworks.length;
-	while( i-- ) {
-		fireworks[ i ].draw();
-		fireworks[ i ].update( i );
-	}
-	
-	var i = particles.length;
-	while( i-- ) {
-		particles[ i ].draw();
-		particles[ i ].update( i );
-	}
-
-	if( timerTick >= timerTotal ) {
-		if( !mousedown ) {
-			fireworks.push( new Firework( cw / 2, ch, random( 0, cw ), random( 0, ch / 2 ) ) );
-			timerTick = 0;
-		}
-	} else {
-		timerTick++;
-	}
-	
-	if( limiterTick >= limiterTotal ) {
-		if( mousedown ) {
-			fireworks.push( new Firework( cw / 2, ch, mx, my ) );
-			limiterTick = 0;
-		}
-	} else {
-		limiterTick++;
-	}
-}
-
-canvas.addEventListener( 'mousemove', function( e ) {
-	mx = e.pageX - canvas.offsetLeft;
-	my = e.pageY - canvas.offsetTop;
-});
-
-canvas.addEventListener( 'mousedown', function( e ) {
-	e.preventDefault();
-	mousedown = true;
-});
-
-canvas.addEventListener( 'mouseup', function( e ) {
-	e.preventDefault();
-	mousedown = false;
-});
-
-window.onload = loop;

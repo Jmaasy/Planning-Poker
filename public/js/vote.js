@@ -49,8 +49,6 @@ function voted(event) {
 
     if(!countDown) document.querySelector(".pyc-center button.reveal-cards").removeAttribute("hidden");
 
-    console.log(event.content);
-
     if(event.content.clientId == id) {
         document.querySelector(`button[data-vote='${oldVotedValue}']`).classList = "";
         document.querySelector(`button[data-vote='${votedValue}']`).classList = "selected";
@@ -67,24 +65,6 @@ function processVoteHistoryUpdate(event) {
                 [x[1][0]]: x[1][1]
             }
         });
-
-        console.log(entriesDeserialized);
-
-        if(entriesDeserialized.length == 1) {
-            document.querySelector("#canvas").removeAttribute("hidden");
-            animate = true;
-            timerTotal = 10;
-
-            requestAnimFrame( loop );
-            setTimeout(_ => {
-                timerTotal = 10000;
-            }, 5000);
-
-            setTimeout(_ => {
-                document.querySelector("#canvas").setAttribute("hidden", true);
-                animate = false;
-            }, 7500)
-        }
 
         const entries = new Map([...entriesDeserialized.entries()]);
         const maxVoted = [...entriesDeserialized.entries()].map(x => Object.values(x[1])[0]).sort(function(a,b) { return b-a })[0];
@@ -106,4 +86,23 @@ function processVoteHistoryUpdate(event) {
 
         historyWrapper.innerHTML += "</li>";
     });
+
+    const lastVotes = [...event.content[0].entries()];
+    const votedValues = lastVotes.map(x => x[1][0]);
+
+    const summedValue = votedValues.reduce((p, c) => p + c, 0);
+    const averageValue = summedValue / votedValues.length;
+    document.querySelector(".average-value").innerHTML = "Average estimate " + averageValue;
+
+    if(lastVotes.length == 1) {
+        document.querySelector("#canvas").removeAttribute("hidden");
+        toggleConfetti();
+        setTimeout(_ => {
+            toggleConfetti();
+        }, 5000);
+
+        setTimeout(_ => {
+            document.querySelector("#canvas").setAttribute("hidden", true);
+        }, 7500);
+    }
 }
