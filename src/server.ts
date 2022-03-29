@@ -14,11 +14,11 @@ const env = dotenv.config();
 const port = 443;
 const planningPoker = new PlanningPoker();
 const app = express()
-// const server = https.createServer({
-//   cert: fs.readFileSync(process.env.CRT),
-//   key: fs.readFileSync(process.env.KEY)
-// }, app);
-const server = http.createServer(app);
+const server = https.createServer({
+  cert: fs.readFileSync(process.env.CRT),
+  key: fs.readFileSync(process.env.KEY)
+}, app);
+// const server = http.createServer(app);
 const io = new socketio.Server();
 
 app.use(cors());
