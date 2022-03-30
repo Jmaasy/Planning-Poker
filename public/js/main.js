@@ -87,7 +87,7 @@ if(checked == null || checked == undefined) {
 
 document.querySelector("body").setAttribute("data-theme", theme);
 
-const backgrounds = ["goat", "zebra", "eiffel"];
+const backgrounds = ["goat", "zebra", "eiffel", "harry", "animal"];
 const selected = backgrounds[Math.floor(Math.random() * backgrounds.length)];
 const suffix = (theme == "dark") ? "b" : "w";
 
