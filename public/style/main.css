@@ -666,3 +666,20 @@ canvas {
   height: 39px;
   top: -22px;
 }
+
+.mistletoe-logo {
+  position: absolute;
+  height: 60px;
+  left: -20px;
+  bottom: -39px;
+}
+
+.input-tooltip {
+  background: var(--primary);
+  padding: 10px;
+  text-align: center;
+  opacity: 1;
+  width: calc(100% - 20px);
+  margin-top: 10px;
+  font-size: 14px;
+}

@@ -2,7 +2,10 @@
 const url = "https://jeffreymaas.dev/";
 
 const backgrounds = ["goat", "zebra", "eiffel", "harry", "animal"];
-const festiveBackgrounds = [{month: 04, day:17, type: "easter"}, {month: 12, day:25, type: "christmas"}];
+const festiveBackgrounds = [
+    {month: 04, day:17, type: "easter", logo: "bunny"}, 
+    {month: 12, day:25, type: "christmas", logo: "mistletoe"}
+];
 
 const completeUrl = new URL(window.location.href);
 let overrideBg = undefined;
@@ -73,9 +76,9 @@ function getBackground(theme) {
     const selected = (filteredBackground != undefined) ? filteredBackground.type : backgrounds[Math.floor(Math.random() * backgrounds.length)];
     const suffix = (theme == "dark") ? "b" : "w";
 
-    if(filteredBackground != undefined && filteredBackground.type == "easter" && !festiveAdded) {
+    if(filteredBackground != undefined && filteredBackground.logo != undefined && !festiveAdded) {
         festiveAdded = !festiveAdded;
-        document.querySelector(".top-header").innerHTML += "<img src='images/easter_bunny.png' class='bunny-logo'>";
+        document.querySelector(".top-header").innerHTML += `<img src='images/${filteredBackground.logo}.png' class='${filteredBackground.logo}-logo'>`;
     }
 
     return `../images/${selected}_${suffix}.png`;

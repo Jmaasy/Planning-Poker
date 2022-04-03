@@ -2,22 +2,11 @@ function connect(queryName = undefined) {
     const name = (queryName == undefined) ? document.querySelector("#user-name-input").value : queryName;
 
     if(name == '') {
-      const spectator = document.querySelector(".checkcontainer input").checked;
-      const positioning = document.querySelector("#user-name-input").getBoundingClientRect();
-      document.querySelector("body").innerHTML += `
-          <div class="tooltip" style='top: calc(${positioning.top}px + 40px); left: calc(${positioning.left}px); opacity: 1;'>
+      document.querySelector("#user-name-input").outerHTML += `
+          <div class="input-tooltip">
               Please fill in a username!
           </div>
       `;
-
-      setTimeout(_ => {
-        if(spectator) document.querySelector(".checkcontainer input").setAttribute("checked", "");
-        document.querySelector(".tooltip").classList += " fadeout";
-
-        setTimeout(_ => {
-            document.querySelector(".tooltip").remove();
-        }, 2000);
-      }, 1000);
     } else {
       const spectator = document.querySelector(".checkcontainer input").checked;
 
