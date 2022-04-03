@@ -1,19 +1,29 @@
 // const url = "localhost:443/";
 const url = "https://jeffreymaas.dev/";
 
+const backgrounds = ["goat", "zebra", "eiffel", "harry", "animal"];
+const festiveBackgrounds = [{month: 04, day:17, type: "easter"}, {month: 12, day:25, type: "christmas"}];
+
+const completeUrl = new URL(window.location.href);
+let overrideBg = undefined;
+let festiveAdded = false;
 let socket = undefined;
 let votedValue = 1;
 let countDown = false;
 let oldVotedValue = 1;
 let id = null;
 
-if(window.location.search.replace("?username=", '') != '') {
+if(completeUrl.searchParams.get("bg") != null) {
+    overrideBg = completeUrl.searchParams.get("bg");
+}
+
+if(completeUrl.searchParams.get("username") != null) {
     document.querySelector(".username-wrapper").removeAttribute("hidden");
-    document.querySelector(".username-wrapper").innerHTML = "Welcome " + window.location.search.replace("?username=", '');
-    connect(window.location.search.replace("?username=", ''));
+    document.querySelector(".username-wrapper").innerHTML = "Welcome " + completeUrl.searchParams.get("username");
+    connect(completeUrl.searchParams.get("username"));
 } else if(window.location.pathname.replace("/", "") != '') {
     document.querySelector(".register-scene").removeAttribute("hidden");
-} else if(window.location.search.replace("?username=", '') == '') {
+} else if(completeUrl.searchParams.get("username") == null) {
     document.querySelector(".register-scene").removeAttribute("hidden");
 }
 
@@ -49,15 +59,34 @@ function joinRoom(roomId) {
     socket.emit("join-room", roomId);
 }
 
+function getBackground(theme) {
+    const date = new Date();
+    const month = date.getMonth();
+    const day = date.getDate();
+
+    const filteredBackground = festiveBackgrounds.filter(filterBackground => {
+        if(month == (filterBackground.month - 1) && (filterBackground.day - day) > 0 && (filterBackground.day - day) < 7 || overrideBg == filterBackground.type) {
+            return true;
+        }
+    })[0];
+
+    const selected = (filteredBackground != undefined) ? filteredBackground.type : backgrounds[Math.floor(Math.random() * backgrounds.length)];
+    const suffix = (theme == "dark") ? "b" : "w";
+
+    if(filteredBackground != undefined && filteredBackground.type == "easter" && !festiveAdded) {
+        festiveAdded = !festiveAdded;
+        document.querySelector(".top-header").innerHTML += "<img src='images/easter_bunny.png' class='bunny-logo'>";
+    }
+
+    return `../images/${selected}_${suffix}.png`;
+}
+
 function setTheme() {
     const checked = document.querySelector("input.theme-toggle-input").checked;
     const value = (!checked) ? "dark" : "light" ;
+    const imageUrl = getBackground(value);
 
-    const backgrounds = ["goat", "zebra", "eiffel"];
-    const selected = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-    const suffix = (value == "dark") ? "b" : "w";
-
-    document.querySelector(".backdrop").style.background = `url(../images/${selected}_${suffix}.png)`;
+    document.querySelector(".backdrop").style.background = `url(${imageUrl})`;
 
     window.localStorage.setItem("theme", value);
     document.querySelector("body").setAttribute("data-theme", value);
@@ -85,11 +114,8 @@ if(checked == null || checked == undefined) {
     checked = (theme == "dark") ? true: false;
 }
 
+const backgroundUrl = getBackground(theme);
+
 document.querySelector("body").setAttribute("data-theme", theme);
-
-const backgrounds = ["goat", "zebra", "eiffel", "harry", "animal"];
-const selected = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-const suffix = (theme == "dark") ? "b" : "w";
-
-document.querySelector(".backdrop").style.background = `url(../images/${selected}_${suffix}.png)`;
+document.querySelector(".backdrop").style.background = `url(${backgroundUrl})`;
 if(!checked) document.querySelector(".theme-toggle-input").setAttribute("checked", true);

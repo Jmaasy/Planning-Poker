@@ -659,3 +659,10 @@ canvas {
     display: none;
   }
 }
+
+.bunny-logo {
+  position: absolute;
+  left: 3px;
+  height: 39px;
+  top: -22px;
+}
