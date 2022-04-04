@@ -1,4 +1,10 @@
+let connected = false;
+
 function connect(queryName = undefined) {
+    if(connected) {
+      return;
+    }
+
     const name = (queryName == undefined) ? document.querySelector("#user-name-input").value : queryName;
 
     if(name == '') {
@@ -9,6 +15,7 @@ function connect(queryName = undefined) {
       `;
     } else {
       const spectator = document.querySelector(".checkcontainer input").checked;
+      connected = true;
 
       document.querySelector(".lower-users").innerHTML = `
         <div class="card" data-id="tbs">
