@@ -683,3 +683,14 @@ canvas {
   margin-top: 10px;
   font-size: 14px;
 }
+
+[data-theme="dark"] .bunny-ears {
+  opacity: .4;
+}
+
+.bunny-ears {
+  position: absolute;
+  top: calc(-100% - 25px);
+  left: -40px;
+  z-index: -1;
+}

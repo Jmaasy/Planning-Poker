@@ -73,12 +73,17 @@ function getBackground(theme) {
         }
     })[0];
 
-    const selected = (filteredBackground != undefined) ? filteredBackground.type : backgrounds[Math.floor(Math.random() * backgrounds.length)];
+    const selected = backgrounds[Math.floor(Math.random() * backgrounds.length)];
     const suffix = (theme == "dark") ? "b" : "w";
 
     if(filteredBackground != undefined && filteredBackground.logo != undefined && !festiveAdded) {
         festiveAdded = !festiveAdded;
         document.querySelector(".top-header").innerHTML += `<img src='images/${filteredBackground.logo}.png' class='${filteredBackground.logo}-logo'>`;
+
+        if(filteredBackground.type == "easter") {
+            document.querySelector(".register-scene .scene-wrapper").innerHTML += "<img class='bunny-ears' src='images/bunny_ears.png'>";
+            document.querySelector(".pyc-center").innerHTML += "<img class='bunny-ears' src='images/bunny_ears.png'>";
+        }
     }
 
     return `../images/${selected}_${suffix}.png`;
