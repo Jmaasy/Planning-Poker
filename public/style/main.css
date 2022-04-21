@@ -195,6 +195,7 @@ html, body {
   height: max-content;
   width: max-content;
   cursor: pointer;
+z-index:100;
 }
 
 .room-identifier {

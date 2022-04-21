@@ -88,12 +88,13 @@ function processVoteHistoryUpdate(event) {
     });
 
     const lastVotes = [...event.content[0].entries()];
-    const votedValues = lastVotes.map(x => x[1][0]);
+    const votedValues = lastVotes.filter(x => x[1][0] != "?").map(x => x[1][0] * x[1][1]);
 
+    if(votedValues.length != 0) {
     const summedValue = votedValues.reduce((p, c) => p + c, 0);
     const averageValue = summedValue / votedValues.length;
     document.querySelector(".average-value").innerHTML = "Average estimate " + averageValue;
-
+}
     if(lastVotes.length == 1) {
         document.querySelector("#canvas").removeAttribute("hidden");
         toggleConfetti();
