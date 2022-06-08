@@ -1,0 +1,5 @@
+.register_scene_wrapper {
+    min-width: 350px;
+    padding: 20px;
+    background: var(--background-800);
+}
