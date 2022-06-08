@@ -42,8 +42,6 @@ export const VoteView: React.FC = () => {
     const latestVotes = Array.from(voteHistory.values()).reverse()[0]
     const votedNumbers = (latestVotes == undefined) ? undefined : latestVotes.map(x => x.amount);
 
-    console.log(new Set(votedNumbers).size);
-
     if(
         lobby?.state == LobbyState.REVEALED &&
         votedNumbers != undefined &&

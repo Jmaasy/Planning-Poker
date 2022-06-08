@@ -25,11 +25,11 @@ const app = express()
         res.sendFile(path.resolve("../client/build/index.html"));
       });
 
-// const server = https.createServer({
-//   cert: fs.readFileSync(process.env.CRT),
-//   key: fs.readFileSync(process.env.KEY)
-// }, app);
-const server = http.createServer(app);
+const server = https.createServer({
+  cert: fs.readFileSync(process.env.CRT),
+  key: fs.readFileSync(process.env.KEY)
+}, app);
+// const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' }, allowEIO3: true});
 
 io.on("connect_error", (err) => Logger.ERROR(err));
