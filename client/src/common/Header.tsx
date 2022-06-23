@@ -3,20 +3,24 @@ import { Navigate } from 'react-router-dom';
 import { Lobby } from '../component/lobby/LobbyType';
 import { LobbyContext } from '../provider/LobbyProvider';
 import { ThemeContext, ThemeType } from '../provider/ThemeProvider';
+import { SocketContext } from "../../provider/SocketProvider";
 
 export const Header: React.FC = () => {   
     const { lobby } = useContext(LobbyContext)!!;
+    const { socket } = useContext(SocketContext)!!;
     const { theme, toggleThemeTypeState, getFestiveLogoImage } = useContext(ThemeContext)!!;
     const [ copyClicked, setCopyClicked ] = useState<boolean>(false);
     const selected = (copyClicked) ? "tooltip": "fadeout tooltip"; 
     const checked = (theme.type == ThemeType.DARK) ? false : true ;
-
+    const connected = (socket.socket.connected)? "connected" : "disconnected" ;
+    
     return (
         <header>
             <img src="/public/images/pp_logo.svg" onClick={_ => Navigate({to: "/register"})} alt=""/>
             <div className="top-header__container">
                 <div>
                     <h2>Planning<span>Poker</span></h2>
+                    <span className={connected}>${connected}</span>
                 </div>
                 <div>
                     <div className="theme-toggle">

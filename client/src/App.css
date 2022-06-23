@@ -768,11 +768,36 @@ header {
   font-weight: lighter;
   font-size: 34px;
   letter-spacing: 2px;
+  display: inline;
 }
 
 .top-header__container h2 span {
   color: var(--alternative);
   font-weight: bold;
+}
+
+.top-header__container > div > span {
+  display: inline-block;
+  vertical-align: top;
+  color: var(--text-color);
+  opacity: .5;
+}
+
+.top-header__container > div > span::before {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inherit;
+  content: "";
+  margin: 0 6px;
+}
+
+.top-header__container > div > span.connected::before {
+  background: green;
+}
+
+.top-header__container > div > span.disconnected::before {
+  background: red;
 }
 
 .share-link {
