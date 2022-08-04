@@ -1,0 +1,1 @@
+sudo certbot --manual --preferred-challenges dns certonly -d jeffreymaas.dev

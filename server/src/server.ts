@@ -30,7 +30,7 @@ const server = https.createServer({
   key: fs.readFileSync(process.env.KEY)
 }, app);
 // const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' }, allowEIO3: true});
+const io = new Server(server, { cors: { origin: '*' }, allowEIO3: true, pingInterval: 50, transports: ["websocket"]});
 
 io.on("connect_error", (err) => Logger.ERROR(err));
 io.on('connection', (socket) => {

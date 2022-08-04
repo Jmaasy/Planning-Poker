@@ -781,6 +781,7 @@ header {
   vertical-align: top;
   color: var(--text-color);
   opacity: .5;
+  display: none !important;
 }
 
 .top-header__container > div > span::before {

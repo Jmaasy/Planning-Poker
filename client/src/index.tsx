@@ -12,7 +12,7 @@ import { VoteHistoryProvider } from "./provider/VoteHistoryProvider";
 import { VoteProvider } from "./provider/VoteProvider";
 
 const host: string = process.env.REACT_APP_HOST ? process.env.REACT_APP_HOST : "localhost";
-const socket = io(`ws://${host}:443`, {timeout: 10, autoConnect: true, reconnectionAttempts: 25, reconnectionDelay: 10, reconnectionDelayMax: 10, reconnection: true});
+const socket = io(`https://jeffreymaas.dev:443`, {secure: true, timeout: 100, reconnectionDelay: 500, reconnectionDelayMax:500, transports: ["websocket"]});
 const themeType = (localStorage.getItem("theme-type") ?? "0") as ThemeType
 const hidden = (localStorage.getItem("hidden") == null || localStorage.getItem("hidden") == "true") ? true : false;
 const hiddenLocked = (localStorage.getItem("hidden") == null) ? false: true;
