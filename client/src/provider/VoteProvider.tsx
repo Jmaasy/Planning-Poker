@@ -28,11 +28,23 @@ export const VoteProvider = (props: VoteProviderProperties) => {
 
     const updateVoteFromUser = (uId: string, number: number | string, hidden: boolean = true) => {
         const voted = votes.find(vote => vote.userId === uId);
+
+        votes.forEach(vote => {
+            if(vote.userId != uId) {
+                const index = votes.indexOf(vote);
+                votes[index] = {
+                    ...vote,
+                    updated: false
+                }
+            }
+        });
+
         if(voted === undefined) {
             votes.push({
                 userId: uId,
                 hidden: isHidden(hidden, uId),
                 voted: true,
+                updated: true,
                 amount: number
             })
         } else {
@@ -40,6 +52,7 @@ export const VoteProvider = (props: VoteProviderProperties) => {
             votes[index] = {
                 ...voted,
                 hidden: isHidden(hidden, uId),
+                updated: true,
                 amount: number
             }
         }

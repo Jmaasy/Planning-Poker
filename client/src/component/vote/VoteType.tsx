@@ -2,7 +2,8 @@ export type Vote = {
     userId: string | null,
     amount: number | string,
     voted: boolean,
-    hidden: boolean
+    hidden: boolean,
+    updated: boolean
 }
 
 export type VoteHistoryWrapper = {

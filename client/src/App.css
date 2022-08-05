@@ -595,6 +595,88 @@ z-index:100;
   top: -11px;
 }
 
+.bottom-row .mobile-mode, .no-spectator {
+  display: none;
+}
+
+@media only screen and (min-device-width: 640px) {
+  .mobile-mode-toggle {
+    display: none;
+  }
+}
+
+@media only screen and (max-device-width: 640px) {
+  .mobile-mode-toggle {
+    position: absolute;
+    top: 8px;
+    left: 157px;
+  }
+  
+  .mobile-mode-toggle label {
+    margin-left: 38px;
+  }
+  
+  .mobile-mode-toggle svg:not(:first-of-type) {
+    fill: var(--text-color);
+    height: 25px;
+    right: -34px;
+    width: fit-content;
+    margin-top: -2px;
+    margin-left: 10px;
+  }
+  
+  .mobile-mode-toggle svg:not(:first-of-type) rect:first-of-type {
+    fill: var(--text-color);
+  }
+  
+  .mobile-mode-toggle svg:not(:first-of-type) rect:last-of-type {
+    fill: var(--secondary);
+  }
+  
+  .mobile-mode-toggle svg:first-of-type {
+    fill: var(--text-color);
+    height: 20px;
+    position: absolute;
+    width: 32px;
+  }
+
+  .scene_wrapper.mobile-mode {
+    display: none;
+  }
+  
+  .bottom-row.mobile-mode .voting-buttons, header.mobile-mode {
+    position: unset;
+  }
+  
+  .bottom-row.mobile-mode .voting-buttons button {
+    width: 27vw;
+    height: calc(25% - 52px);
+  }
+  
+  .bottom-row.mobile-mode .voting-buttons button.selected {
+    margin: 0 5px 10px;
+    transition: unset;
+  }
+  
+  header.mobile-mode + .room-scene, .bottom-row.mobile-mode, .bottom-row.mobile-mode .voting-buttons {
+    height: 100%;
+  }   
+  
+  .tooltip, .share-link {
+    display: none !important;
+  }
+
+  .specator.mobile-mode {
+    display: block;
+  }
+}
+
+@media screen and (max-device-width:360px) {
+  .bottom-row.mobile-mode .voting-buttons button {
+    height: calc(18% - 52px);
+  }  
+}
+
 /* Hide default HTML checkbox */
 .switch input {
   opacity: 0;
@@ -899,4 +981,22 @@ header {
 
 .__react_component_tooltip::after {
   display: none !important;
+}
+
+.pulse-primary-color {
+  animation: pulse-primary-color 2s 1;
+}
+
+@keyframes pulse-primary-color {
+  0% {
+    box-shadow: 0 0 0 0 rgb(255, 138, 128, 0.7);
+  }
+  
+  70% {
+    box-shadow: 0 0 0 10px rgb(255, 138, 128, 0);
+  }
+  
+  100% {
+    box-shadow: 0 0 0 0 rgb(255, 138, 128, 0);
+  }
 }

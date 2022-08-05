@@ -17,13 +17,16 @@ export const LobbyView: React.FC = () => {
     const { lobby, getEvenUsers, getOddUsers, setLobbyState, addUserToLobby, removeUserFromLobby } = useContext(LobbyContext)!!;
     const { id } = useParams();
     const { socket } = useContext(SocketContext)!!;
-    const { getFestiveCenterImage } = useContext(ThemeContext)!!;
+    const { theme, getFestiveCenterImage } = useContext(ThemeContext)!!;
     const { votes, updateVoteFromUser } = useContext(VoteContext)!!;
     setupEventHandlers(socket, user, lobby, id, setUserDetails, setLobbyState, addUserToLobby, removeUserFromLobby, updateVoteFromUser);
 
+    const mobileModeClass = (theme.buttonMode) ? "mobile-mode" : "";
+    const spectatorClass = (user.userDetails?.spectator)? "specator" : "no-spectator";
+    
     return (
         <div className="room-scene">
-            <div className="scene_wrapper">
+            <div className={`scene_wrapper ${mobileModeClass}`}>
                 <div className="upper-users">
                     { generateCards(getOddUsers(lobby?.users ?? []), lobby, votes, user, true) }
                 </div>
@@ -35,7 +38,8 @@ export const LobbyView: React.FC = () => {
                     { generateCards(getEvenUsers(lobby?.users ?? []), lobby, votes, user) }
                 </div>
             </div>
-            <div className="bottom-row">
+            <div className={`bottom-row ${mobileModeClass}`}>
+                <span className={`${spectatorClass} ${mobileModeClass}`}>You joined in spectator mode.</span>
                 <span className="room-identifier">Room id<span className="room-id">{ lobby?.id }</span></span>
                 <VoteView></VoteView>
             </div>

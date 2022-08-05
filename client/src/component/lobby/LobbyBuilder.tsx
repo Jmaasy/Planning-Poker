@@ -28,12 +28,14 @@ export const getPycCenter = (
 export const generateCards = (users: User[] = [], lobby: Lobby | null, votes: Vote[] | null, selfUser: User | null, upper: boolean = false) => {
     return users.map(user => {
         const vote = (votes !== null) ? votes.find(vote => vote.userId === user.id): null;
+        const pulseClass = (vote?.updated)? "number pulse-primary-color" : "number";
         const classes = (vote == null || !vote.voted) ? "card" : "card selected";
+        
         const renderNumber = (vote?.userId === selfUser?.id || !vote?.hidden || (lobby != null && lobby.state == LobbyState.REVEALED)) ? vote?.amount: "";
         return (
             <div className={classes} data-id={user.id}>
                 {(upper) ? (<span>{user.userDetails?.name}</span>): ("")}
-                <span className="number">{(user.userDetails?.spectator) ? (<img src="/public/images/spectator.svg" alt=""/>): renderNumber}</span>
+                <span className={pulseClass}>{(user.userDetails?.spectator) ? (<img src="/public/images/spectator.svg" alt=""/>): renderNumber}</span>
                 {(!upper) ? (<span>{user.userDetails?.name}</span>): ("")}
             </div>
         )

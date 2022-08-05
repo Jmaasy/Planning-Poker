@@ -8,6 +8,7 @@ export type ThemeProviderProperties = {
 export type ThemeStateHandler = {
     theme: Theme,
     toggleThemeTypeState: () => void,
+    toggleMobileMode: () => void,
     getFestiveCenterImage: () => JSX.Element,
     getFestiveLogoImage: () => JSX.Element,
     setTheme: React.Dispatch<React.SetStateAction<Theme>>
@@ -25,7 +26,8 @@ export type Theme = {
     festiveLogo: FestiveLogo | null,
     festiveCenter: FestiveCenter | null,
     background: ThemeBackground,
-    hiddenProperties: HiddenProperties
+    hiddenProperties: HiddenProperties,
+    buttonMode: boolean
 }
 
 export enum ThemeType {
@@ -79,6 +81,12 @@ export const ThemeProvider = (props: ThemeProviderProperties) => {
         setTheme({...theme, type: newThemeType})
     }
 
+    const toggleMobileMode = () => {
+        const newButtonMode = !theme.buttonMode;
+        localStorage.setItem("mobile-button-mode", newButtonMode.toString());
+        setTheme({...theme, buttonMode: newButtonMode})
+    }
+
     const getFestiveCenterImage = () => {
         return (
             <img src={`public/images/${theme.festiveCenter}.png`} alt={theme.festive?.toLowerCase()?? ""} className={theme.festiveCenter?? ""}></img>
@@ -94,6 +102,7 @@ export const ThemeProvider = (props: ThemeProviderProperties) => {
     const state: ThemeStateHandler = {
         theme: theme,
         toggleThemeTypeState: toggleThemeTypeState,
+        toggleMobileMode: toggleMobileMode,
         getFestiveCenterImage: getFestiveCenterImage,
         getFestiveLogoImage: getFestiveLogoImage,
         setTheme: setTheme
