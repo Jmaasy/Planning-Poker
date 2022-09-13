@@ -147,3 +147,25 @@ export const getFestiveType = () => {
     if(festiveBackgrounds.length == 0) return null
     return festiveBackgrounds[0];
 }
+
+export const startupThemeState = (): Theme => {
+    const themeType = (localStorage.getItem("theme-type") ?? "0") as ThemeType
+    const hidden = (localStorage.getItem("hidden") == null || localStorage.getItem("hidden") == "true") ? true : false;
+    const hiddenLocked = (localStorage.getItem("hidden") == null) ? false: true;
+    const mobileButtonMode = (localStorage.getItem("mobile-button-mode") == null || localStorage.getItem("mobile-button-mode") == "false") ? false: true;
+
+    return {
+        type: themeType, 
+        confettiActive: ConfettiState.OFF, 
+        background: randomBackground(), 
+        festive: getFestiveType(), 
+        festiveLogo: getFestiveLogo(), 
+        festiveCenter: getFestiveCenter(), 
+        hiddenProperties: {
+            hidden: hidden, 
+            locked: hiddenLocked
+        }, 
+        buttonMode: mobileButtonMode
+    }
+
+}

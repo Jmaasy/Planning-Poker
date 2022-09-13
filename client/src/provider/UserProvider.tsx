@@ -20,12 +20,16 @@ export const UserProvider = (props: UserProviderProperties) => {
     const [user, setUser] = useState(props.value);
 
     const setUserDetails = (
-        name: string | null = null, 
-        spectator: boolean = false, 
-        inLobby: boolean | null = null, 
+        name: string | null = null,
+        spectator: boolean = false,
+        inLobby: boolean | null = null,
         lobbyId: number | null = null
     ) => {
         const currentUserDetails = user.userDetails;
+
+        if(name != null && !randomUserNames.includes(name)) {
+            localStorage.setItem("user-name", name);
+        }
 
         const userDetails = {
             name: name ?? currentUserDetails?.name,
@@ -33,7 +37,7 @@ export const UserProvider = (props: UserProviderProperties) => {
             inLobby: inLobby ?? currentUserDetails?.inLobby,
             lobbyId: lobbyId ?? currentUserDetails?.lobbyId
         } as UserDetails
-        setUser({...user, userDetails: userDetails});
+        setUser({ ...user, userDetails: userDetails });
     }
 
     const state: UserStateHandler = {
@@ -48,6 +52,17 @@ export const UserProvider = (props: UserProviderProperties) => {
         </UserContext.Provider>
     );
 };
+
+export const startupUserState = (): User => {
+    const userName = (localStorage.getItem("user-name") == null) ? null : localStorage.getItem("user-name");
+    return {
+        id: "", 
+        connected: false, 
+        userDetails: {
+            name: userName
+        } as UserDetails
+    }
+}
 
 const randomUserNames = [
     "Adhara",

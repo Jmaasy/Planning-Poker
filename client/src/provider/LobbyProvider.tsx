@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { Lobby } from '../component/lobby/LobbyType';
+import { Lobby, LobbyState } from '../component/lobby/LobbyType';
 import { User } from '../component/user/UserType';
 
 export type LobbyProviderProperties = {
@@ -54,3 +54,7 @@ export const LobbyProvider = (props: LobbyProviderProperties) => {
         </LobbyContext.Provider>
     );
 };
+
+export const startupLobbyState = (): Lobby => {
+    return {id: null, users: [], state: LobbyState.STARTUP, revealIn: 3 }
+}

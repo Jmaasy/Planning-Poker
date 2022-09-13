@@ -72,7 +72,6 @@ html, body, #root, #main {
   left: 0;
   right: 0;
   margin: auto;
-  width: fit-content;
   z-index: 100;
   text-align: center;
 }
@@ -562,37 +561,34 @@ z-index:100;
 }
 
 .theme-toggle {
-  position: relative;
-  display: inline-block;
   width: max-content;
+  display: inline-block;
+  margin-left: 8px;
   margin-top: 8px;
-  margin-left: -4px;
-  z-index: 4;
 }
 
 .switch {
-  position: relative;
-  display: inline-block;
-  width: 40px;
   height: 20px;
-  vertical-align: top;
-  margin-left: 41px;
+  width: 40px;
+  display: inline-block;
 }
 
 .theme-toggle svg:not(:first-of-type) {
-  height: 25px;
-  position: absolute;
-  right: -34px;
-  top: -2px;
   fill: var(--text-color);
+  height: 25px;
+  display: inline-block;
+  vertical-align: bottom;
+  margin-left: 5px;
 }
 
 .theme-toggle svg:first-of-type {
-  width: 40px;
   fill: var(--text-color);
-  height: 40px;
-  position: absolute;
-  top: -11px;
+  height: 25px;
+  width: 17px;
+  display: inline-block;
+  margin-top: -15px;
+  vertical-align: middle;
+  margin-right: 5px;
 }
 
 .bottom-row .mobile-mode, .no-spectator {
@@ -607,39 +603,31 @@ z-index:100;
 
 @media only screen and (max-device-width: 640px) {
   .mobile-mode-toggle {
-    position: absolute;
-    top: 8px;
-    left: 157px;
+    margin-left: 20px;
+    display: inline-block;
   }
-  
-  .mobile-mode-toggle label {
-    margin-left: 38px;
+
+  .register_scene_wrapper {
+    min-width: calc(100% - 60px);
   }
-  
-  .mobile-mode-toggle svg:not(:first-of-type) {
-    fill: var(--text-color);
-    height: 25px;
-    right: -34px;
-    width: fit-content;
-    margin-top: -2px;
-    margin-left: 10px;
+
+  .mobile-mode-toggle svg:first-of-type {
+    margin-top: -10px;
+    width: 20px;
   }
   
   .mobile-mode-toggle svg:not(:first-of-type) rect:first-of-type {
-    fill: var(--text-color);
+    fill: var(--secondary);
   }
-  
-  .mobile-mode-toggle svg:not(:first-of-type) rect:last-of-type {
+
+  .mobile-mode-toggle svg:not(:first-of-type) path:first-of-type {
     fill: var(--secondary);
   }
   
-  .mobile-mode-toggle svg:first-of-type {
+  .mobile-mode-toggle svg:not(:first-of-type) rect:last-of-type {
     fill: var(--text-color);
-    height: 20px;
-    position: absolute;
-    width: 32px;
   }
-
+  
   .scene_wrapper.mobile-mode {
     display: none;
   }
@@ -679,6 +667,7 @@ z-index:100;
 
 /* Hide default HTML checkbox */
 .switch input {
+  display: none;
   opacity: 0;
   width: 0;
   height: 0;
@@ -686,26 +675,22 @@ z-index:100;
 
 /* The slider */
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 1px solid var(--primary);
   background-color: var(--secondary);
+  border: 1px solid var(--primary);
+  cursor: pointer;
   -webkit-transition: .4s;
   transition: .4s;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 14px;
-  width: 14px;
-  left: 2px;
-  top: 2px;
   background-color: var(--primary);
+  border-radius: 50%;
+  display: block;
+  content: "";
+  height: 15px;
+  width: 15px;
+  margin-top: 2px;
+  margin-left: 4px;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -719,19 +704,22 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
   background: var(--secondary);
-  left: -5px;
+  -webkit-transform: translateX(26px);
+  transform: translateX(26px);
+  margin-left: -4px;
 }
 
 /* Rounded sliders */
 .slider.round {
+  width: 100%;
+  height: 100%;
   border-radius: 34px;
+  display: block;
 }
 
 .slider.round:before {
+  display: block;
   border-radius: 50%;
 }
 
@@ -862,8 +850,6 @@ header {
   display: inline-block;
   vertical-align: top;
   color: var(--text-color);
-  opacity: .5;
-  display: none !important;
 }
 
 .top-header__container > div > span::before {
@@ -875,20 +861,18 @@ header {
   margin: 0 6px;
 }
 
-.top-header__container > div > span.connected::before {
+.top-header__container > div > span.socket-connected::before {
   background: green;
 }
 
-.top-header__container > div > span.disconnected::before {
+.top-header__container > div > span.socket-disconnected::before {
   background: red;
 }
 
 .share-link {
-  display: inline-block;
-  margin-left: 48px;
-  position: absolute;
-  top: 8px;
   cursor: pointer;
+  display: inline-block;
+  margin-left: 15px;
   width: max-content;
 }
 
@@ -999,4 +983,16 @@ header {
   100% {
     box-shadow: 0 0 0 0 rgb(255, 138, 128, 0);
   }
+}
+
+@-o-viewport {
+  max-zoom: 1;
+}
+
+@viewport {
+  max-zoom: 1;
+}
+
+@-ms-viewport {
+  max-zoom: 1;
 }
