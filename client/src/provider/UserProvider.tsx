@@ -30,6 +30,8 @@ export const UserProvider = (props: UserProviderProperties) => {
         if(name != null && !randomUserNames.includes(name)) {
             localStorage.setItem("user-name", name);
         }
+    
+        localStorage.setItem("user-spectator", spectator.toString());
 
         const userDetails = {
             name: name ?? currentUserDetails?.name,
@@ -54,12 +56,15 @@ export const UserProvider = (props: UserProviderProperties) => {
 };
 
 export const startupUserState = (): User => {
-    const userName = (localStorage.getItem("user-name") == null) ? null : localStorage.getItem("user-name");
+    const userName = localStorage.getItem("user-name");
+    const spectator = localStorage.getItem("user-spectator")?? false;
+
     return {
         id: "", 
         connected: false, 
         userDetails: {
-            name: userName
+            name: userName,
+            spectator: spectator
         } as UserDetails
     }
 }

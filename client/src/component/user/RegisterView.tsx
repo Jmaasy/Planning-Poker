@@ -16,7 +16,7 @@ export const RegisterView: React.FC = () => {
 
     return (
         <div className="scene_wrapper register_scene_wrapper">
-            <input type="text" id="user-name-input" maxLength={12} value={user.userDetails?.name || ""} placeholder="name" onChange={e => setUserDetails(e.target.value.trim())} autoFocus/>
+            <input type="text" id="user-name-input" maxLength={12} value={user.userDetails?.name || ""} placeholder="name" onChange={e => setUserDetails(e.target.value.trim())}/>
                 <label className="checkcontainer">
                     spectator mode
                 <input type="checkbox" checked={user.userDetails?.spectator || false} onChange={e => setUserDetails(null, e.target.checked)}/>
