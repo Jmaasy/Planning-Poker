@@ -31,6 +31,8 @@ export const UserProvider = (props: UserProviderProperties) => {
             localStorage.setItem("user-name", name);
         }
     
+
+        console.log(spectator);
         localStorage.setItem("user-spectator", spectator.toString());
 
         const userDetails = {
@@ -57,7 +59,7 @@ export const UserProvider = (props: UserProviderProperties) => {
 
 export const startupUserState = (): User => {
     const userName = localStorage.getItem("user-name");
-    const spectator = localStorage.getItem("user-spectator")?? false;
+    const spectator = localStorage.getItem("user-spectator") == "true";
 
     return {
         id: "", 
