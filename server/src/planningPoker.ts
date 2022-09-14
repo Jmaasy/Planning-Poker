@@ -173,6 +173,13 @@ class PlanningPoker {
         }
     }
 
+    validateRoom(socket: Socket, roomId: string) {
+        if(this.roomHandler.getState(roomId) == RoomState.ERROR) {
+            const resp = buildResponse(null, false);
+            emitToSelf(socket, "room-validation-failed", resp)
+        }
+    }
+
     getRoomState(socket: Socket, clientId: string, roomId: string) {
         if(this.userHandler.validateUser(clientId, socket)) {
             const state = this.roomHandler.getState(roomId)

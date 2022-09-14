@@ -996,3 +996,24 @@ header {
 @-ms-viewport {
   max-zoom: 1;
 }
+
+.Toastify__toast-theme--dark {
+  background: var(--background-800) !important;
+  color: var(--text-color) !important;
+}
+
+.Toastify__toast--success svg {
+  fill: green;
+}
+
+.Toastify__toast--success .Toastify__close-button + div {
+  background: green !important;
+}
+
+.Toastify__toast--error svg {
+  fill: red;
+}
+
+.Toastify__toast--error .Toastify__close-button + div {
+  background: red !important;
+}

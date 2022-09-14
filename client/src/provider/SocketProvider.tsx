@@ -1,6 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { SocketType } from '../component/socket/SocketType';
+import { toast } from 'react-toastify';
 
 export type SocketProviderProperties = {
     children: ReactElement,
@@ -8,7 +9,8 @@ export type SocketProviderProperties = {
 }
 
 export type SocketStateHandler = {
-    socket: Socket | null
+    socket: Socket | null,
+    socketConnectionWasLost: Number
 }
 
 export const SocketContext = React.createContext<SocketStateHandler | null>(null);
@@ -17,15 +19,27 @@ export const SocketProvider = (props: SocketProviderProperties) => {
     const [socket, setSocketState] = useState(props.value);
 
     const state: SocketStateHandler = {
-        socket: socket?.socket ?? null
+        socket: socket?.socket ?? null,
+        socketConnectionWasLost: socket?.connectionWasLost ?? 0
     }
 
     socket?.socket?.on('disconnect', () => {
-        setSocketState({...socket, lastUpdatedTimestamp: Date.now()});
+        toast.error('Connection to the server has been lost.');
+        setSocketState({...socket, lastUpdatedTimestamp: Date.now(), connectionWasLost: 1});
+        toast.clearWaitingQueue();
     });
 
     socket?.socket?.on('connect', () => {
-        setSocketState({...socket, lastUpdatedTimestamp: Date.now()});
+        if(socket.connectionWasLost) {
+            toast.success('Connection to the server has been regained.', {
+                onOpen: () => {
+                    setSocketState({...socket, lastUpdatedTimestamp: Date.now(), connectionWasLost: -1});
+                } 
+            });
+            toast.clearWaitingQueue();
+        } else {
+            setSocketState({...socket, lastUpdatedTimestamp: Date.now(), connectionWasLost: 0});
+        }
     });
 
     return (
@@ -40,6 +54,7 @@ export const startupSocketState = (): SocketType => {
     // const socket = io(`http://localhost:443`, {secure: true, timeout: 100, reconnectionDelay: 500, reconnectionDelayMax:500, transports: ["websocket"]});
     return {
         socket: socket,
-        lastUpdatedTimestamp: Date.now()
+        lastUpdatedTimestamp: Date.now(),
+        connectionWasLost: 0
     }
 }

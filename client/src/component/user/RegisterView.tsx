@@ -7,8 +7,8 @@ import { ThemeContext } from "../../provider/ThemeProvider";
 import "./RegisterView.css";
 
 export const RegisterView: React.FC = () => {  
-    const {user, setUserState, setUserDetails} = useContext(UserContext)!!;
-    const {socket} = useContext(SocketContext)!!;
+    const { user, setUserState, setUserDetails } = useContext(UserContext)!!;
+    const { socket } = useContext(SocketContext)!!;
     const { getFestiveCenterImage } = useContext(ThemeContext)!!;
     const { id } = useParams();
     const navigate = useNavigate();

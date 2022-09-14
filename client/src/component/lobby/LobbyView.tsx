@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LobbyContext } from '../../provider/LobbyProvider';
 import { SocketContext } from '../../provider/SocketProvider';
 import { ThemeContext } from '../../provider/ThemeProvider';
@@ -16,10 +16,17 @@ export const LobbyView: React.FC = () => {
     const { user, setUserDetails } = useContext(UserContext)!!;
     const { lobby, getEvenUsers, getOddUsers, setLobbyState, addUserToLobby, removeUserFromLobby } = useContext(LobbyContext)!!;
     const { id } = useParams();
-    const { socket } = useContext(SocketContext)!!;
+    const { socket, socketConnectionWasLost } = useContext(SocketContext)!!;
     const { theme, getFestiveCenterImage } = useContext(ThemeContext)!!;
     const { votes, updateVoteFromUser } = useContext(VoteContext)!!;
-    setupEventHandlers(socket, user, lobby, id, setUserDetails, setLobbyState, addUserToLobby, removeUserFromLobby, updateVoteFromUser);
+    const navigate = useNavigate();
+    
+    setupEventHandlers(socket, user, lobby, id, setUserDetails, setLobbyState, addUserToLobby, removeUserFromLobby, updateVoteFromUser, navigate);
+
+    // -1 means connection was lost and is restored which requires an lobby check to verify the lobby still exists
+    if(socketConnectionWasLost == -1 && user.userDetails?.lobbyId != undefined) {
+        socket?.emit("validate-room", user.userDetails?.lobbyId)
+    }
 
     const mobileModeClass = (theme.buttonMode) ? "mobile-mode" : "";
     const spectatorClass = (user.userDetails?.spectator)? "specator" : "no-spectator";

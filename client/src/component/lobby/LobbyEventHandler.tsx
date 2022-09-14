@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, NavigateFunction } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { User, EventUserWrapper } from "../user/UserType";
 import { Lobby, LobbyState } from "./LobbyType";
@@ -12,7 +12,8 @@ export const setupEventHandlers = (
     setLobbyState: React.Dispatch<React.SetStateAction<Lobby | null>>,
     addUserToLobby: (user: User) => void,
     removeUserFromLobby: (uId: string) => void,
-    updateVoteFromUser: (uId: string, number: number | string, hidden: boolean) => void
+    updateVoteFromUser: (uId: string, number: number | string, hidden: boolean) => void,
+    navigate: NavigateFunction
 ) => {
     if(socket != null) {
         if(user.connected && user.userDetails?.lobbyId === undefined && id === undefined) {
@@ -80,5 +81,9 @@ export const setupEventHandlers = (
         socket.off("disconnect-room-processed").on("disconnect-room-processed", event => {
             removeUserFromLobby(event.content.clientId);
         });
+
+        socket.off("room-validation-failed").on("room-validation-failed", () => {
+            navigate("/register");
+        })
     }
 };

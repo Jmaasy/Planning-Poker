@@ -45,6 +45,7 @@ io.on('connection', (socket) => {
       emitToSelf(socket, "registration-processed", resp);
     }
   })
+  socket.on("validate-room", (roomId: string) => planningPoker.validateRoom(socket, roomId))
   socket.on("create-room", _ => planningPoker.createRoom(socket, socket.id, "lol"));
   socket.on("join-room", (roomId: string) => planningPoker.joinRoom(socket, socket.id, roomId));
   socket.on("get-room-state", (roomId: string) => planningPoker.getRoomState(socket, socket.id, roomId));

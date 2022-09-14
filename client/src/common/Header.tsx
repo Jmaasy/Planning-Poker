@@ -1,16 +1,15 @@
-import React, { useContext, useState } from 'react' 
+import React, { useContext } from 'react' 
 import { Navigate } from 'react-router-dom';
 import { Lobby } from '../component/lobby/LobbyType';
 import { LobbyContext } from '../provider/LobbyProvider';
 import { ThemeContext, ThemeType } from '../provider/ThemeProvider';
 import { SocketContext } from "../provider/SocketProvider";
+import { toast } from 'react-toastify';
 
 export const Header: React.FC = () => {   
     const { lobby } = useContext(LobbyContext)!!;
-    const { socket } = useContext(SocketContext)!!;
+    const { socket, socketConnectionWasLost } = useContext(SocketContext)!!;
     const { theme, toggleThemeTypeState, getFestiveLogoImage, toggleMobileMode } = useContext(ThemeContext)!!;
-    const [ copyClicked, setCopyClicked ] = useState<boolean>(false);
-    const selected = (copyClicked) ? "tooltip": "fadeout tooltip"; 
     const checked = (theme.type == ThemeType.DARK) ? false : true ;
     const headerClasses = (theme.buttonMode) ? "mobile-mode" : "";
 
@@ -40,7 +39,7 @@ export const Header: React.FC = () => {
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 25"><rect x="16" y="25" width="16" height="25" rx="2" transform="rotate(180 16 25)" fill="white"></rect><rect x="15" y="24" width="14" height="23" rx="2" transform="rotate(180 15 24)" fill="#101010"></rect><path d="M9 3.5C9 3.77614 8.77614 4 8.5 4L7.5 4C7.22386 4 7 3.77614 7 3.5V3.5C7 3.22386 7.22386 3 7.5 3L8.5 3C8.77614 3 9 3.22386 9 3.5V3.5Z" fill="white"></path></svg>
                     </div>
                     {(lobby?.id == null || lobby.id == undefined) ? null : 
-                        <div className="share-link" onClick={_ => copyRoomId(lobby, setCopyClicked)}>
+                        <div className="share-link" onClick={_ => copyRoomId(lobby)}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19">
                                 <path d="M18.6917 5.9893L12.1603 0.222021C11.5886 -0.282856 10.6875 0.127003 10.6875 0.911279V3.949C4.72666 4.01878 0 5.24039 0 11.0168C0 13.3483 1.46883 15.658 3.09244 16.8656C3.59909 17.2424 4.32117 16.7694 4.13436 16.1586C2.45167 10.6559 4.93247 9.19501 10.6875 9.11035V12.4464C10.6875 13.2319 11.5893 13.6399 12.1603 13.1357L18.6917 7.36782C19.1025 7.00497 19.1031 6.35264 18.6917 5.9893Z" fill="white"></path>
                             </svg>
@@ -50,23 +49,16 @@ export const Header: React.FC = () => {
                 </div>
             </div>
             { getFestiveLogoImage() }
-            <div className={selected}>
-                PlanningPoker link has been copied to your clipboard.
-            </div>
         </header>
     );
 }
 
 const copyRoomId = (
-    lobby: Lobby | null,
-    setCopyClicked: React.Dispatch<React.SetStateAction<boolean>>
+    lobby: Lobby | null
 ) => {
     if(lobby != null && lobby.id !== undefined && lobby.id != null) {
         const registerUrl = `${window.location.origin}/register`;
         navigator.clipboard.writeText(`${registerUrl}/${lobby?.id}`);
-        setCopyClicked(true);
-        setTimeout(() => {
-            setCopyClicked(false);
-        }, 2500);            
+        toast.success('PlanningPoker link has been copied to your clipboard.');
     }
 }
