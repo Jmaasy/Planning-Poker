@@ -10,6 +10,7 @@ import { VoteHistoryView } from '../vote/VoteHistoryView';
 import { VoteView } from '../vote/VoteView';
 import { generateCards, getPycCenter } from './LobbyBuilder';
 import { setupEventHandlers } from './LobbyEventHandler';
+import { toast } from 'react-toastify';
 import './LobbyView.css';
 
 export const LobbyView: React.FC = () => {   
@@ -29,8 +30,12 @@ export const LobbyView: React.FC = () => {
     }
 
     const mobileModeClass = (theme.buttonMode) ? "mobile-mode" : "";
-    const spectatorClass = (user.userDetails?.spectator)? "specator" : "no-spectator";
     
+    if(user.userDetails?.spectator) {
+        toast.info('Connected as a spectator.');
+        toast.clearWaitingQueue();
+    }
+
     return (
         <div className="room-scene">
             <div className={`scene_wrapper ${mobileModeClass}`}>
@@ -46,7 +51,6 @@ export const LobbyView: React.FC = () => {
                 </div>
             </div>
             <div className={`bottom-row ${mobileModeClass}`}>
-                <span className={`${spectatorClass} ${mobileModeClass}`}>You joined in spectator mode.</span>
                 <span className="room-identifier">Room id<span className="room-id">{ lobby?.id }</span></span>
                 <VoteView></VoteView>
             </div>

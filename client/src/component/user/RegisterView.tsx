@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { SocketContext } from "../../provider/SocketProvider";
 import { UserContext } from "../../provider/UserProvider";
@@ -13,6 +13,14 @@ export const RegisterView: React.FC = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     setupEventHandlers(socket, user, id, setUserState, navigate);
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyVote, true);
+    }, []);
+
+    function handleKeyVote(e: KeyboardEvent) {
+        if(e.key == "Enter") registerUser(socket, user, setUserState)
+	}
 
     return (
         <div className="scene_wrapper register_scene_wrapper">
