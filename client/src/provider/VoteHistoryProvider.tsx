@@ -18,7 +18,7 @@ export const VoteHistoryProvider = (props: VoteHistoryProviderProperties) => {
     const [ lastSet, setLastSet ] = useState(Date.now());
 
     const updateVoteHistory = (votes: Vote[]) => {
-        // Ugly solution for the issue where the istory is being set twice once in a while.
+        // Ugly solution for the issue where the history is being set twice once in a while.
         if(Date.now() - lastSet > 3000) {
             voteHistory.set(uuidv4(), votes)
             setVoteHistory(voteHistory);

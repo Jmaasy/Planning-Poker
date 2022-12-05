@@ -1,5 +1,6 @@
 import React from "react";
 import { Socket } from "socket.io-client";
+import { Analytics } from "../../common/Analytics";
 import { ConfettiState, Theme } from "../../provider/ThemeProvider";
 import { Lobby, LobbyState } from "../lobby/LobbyType";
 import { Vote } from "./VoteType";
@@ -11,6 +12,7 @@ export const processVote = (
     updateVoteFromUser: (uId: string, number: number | string, hidden: boolean) => void
 ) => {
     if(socket != null) {
+        Analytics.trackVoting(vote);
         updateVoteFromUser(userId, vote, false);
         socket.emit("vote", vote);
     }
@@ -66,9 +68,13 @@ export const setupEventHandlers = (
 };
 
 export const revealVotes = (
-    socket: Socket | null
+    socket: Socket | null,
+    lobbyId: string
 ) => {
-    if(socket != null) socket.emit("reveal-votes");
+    if(socket != null) {
+        Analytics.trackVotesReveal(lobbyId);
+        socket.emit("reveal-votes");
+    }
 }
 
 export const resetVotes = (

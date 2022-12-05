@@ -1,5 +1,6 @@
 import { Navigate, NavigateFunction } from "react-router-dom";
 import { Socket } from "socket.io-client";
+import { Analytics } from "../../common/Analytics";
 import { User, EventUserWrapper } from "../user/UserType";
 import { Lobby, LobbyState } from "./LobbyType";
 
@@ -20,6 +21,8 @@ export const setupEventHandlers = (
             // Creating a room
             socket.emit("create-room");
             socket.off("create-room-processed").on("create-room-processed", event => {
+                Analytics.trackCreatedLobby();
+
                 setUserDetails(null, event.content.spectator, true, event.content.roomId);
                 addUserToLobby(user);  
                 if(lobby !== null) {      
@@ -28,8 +31,11 @@ export const setupEventHandlers = (
             });
         } else if(user.connected && user.userDetails?.lobbyId === undefined && id !== undefined) {
             // Joining a room
+
             socket.emit("join-room", id);
             socket.off("join-room-emit-processed").on("join-room-emit-processed", event => {
+                Analytics.trackJoinedLobby();
+
                 setUserDetails(null, event.content.self.spectator, true, event.content.self.roomId);
                 event.content.connected.map((connectedUserWrapper: EventUserWrapper) => {
                     if(connectedUserWrapper.votedStatus && connectedUserWrapper.votedNumber !== null) {
@@ -79,6 +85,8 @@ export const setupEventHandlers = (
         });
 
         socket.off("disconnect-room-processed").on("disconnect-room-processed", event => {
+            Analytics.trackLeftLobby();
+
             removeUserFromLobby(event.content.clientId);
         });
 

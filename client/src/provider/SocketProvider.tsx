@@ -2,6 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { SocketType } from '../component/socket/SocketType';
 import { toast } from 'react-toastify';
+import { Analytics } from '../common/Analytics';
 
 export type SocketProviderProperties = {
     children: ReactElement,
@@ -24,13 +25,18 @@ export const SocketProvider = (props: SocketProviderProperties) => {
     }
 
     socket?.socket?.on('disconnect', () => {
+        Analytics.trackConnectionLost();
+        
         toast.error('Connection to the server has been lost.');
         setSocketState({...socket, lastUpdatedTimestamp: Date.now(), connectionWasLost: 1});
         toast.clearWaitingQueue();
     });
 
     socket?.socket?.on('connect', () => {
+
         if(socket.connectionWasLost) {
+            Analytics.trackConnectionRegained();
+
             toast.success('Connection to the server has been regained.', {
                 onOpen: () => {
                     setSocketState({...socket, lastUpdatedTimestamp: Date.now(), connectionWasLost: -1});
@@ -38,6 +44,8 @@ export const SocketProvider = (props: SocketProviderProperties) => {
             });
             toast.clearWaitingQueue();
         } else {
+            Analytics.trackConnectionSuccess();
+
             setSocketState({...socket, lastUpdatedTimestamp: Date.now(), connectionWasLost: 0});
         }
     });

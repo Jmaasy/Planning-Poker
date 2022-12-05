@@ -8,7 +8,7 @@ export const getPycCenter = (
     lobby: Lobby | null,
     socket: Socket | null,
     resetVotes: (socket: Socket | null) => void,
-    revealVotes: (socket: Socket | null) => void
+    revealVotes: (socket: Socket | null, lobbyId: string) => void
 ) => {
     if(lobby?.state === LobbyState.STARTED && user?.userDetails?.spectator) {
         return (<span className="title">Wait for cards to be picked.</span>);
@@ -19,7 +19,7 @@ export const getPycCenter = (
     } else if(lobby?.state === LobbyState.COUNTDOWN) {
         return (<span className="reveal">Reveal in <span className="seconds">{lobby.revealIn}</span></span>);
     } else if(lobby?.state === LobbyState.VOTED) {
-        return (<button className="reveal-cards" onClick={_ => revealVotes(socket)}>Reveal cards</button>);
+        return (<button className="reveal-cards" onClick={_ => revealVotes(socket, lobby.id??"")}>Reveal cards</button>);
     } else {
         return null;
     }

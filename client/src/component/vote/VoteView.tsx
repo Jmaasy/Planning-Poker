@@ -8,20 +8,13 @@ import { VoteContext } from '../../provider/VoteProvider';
 import { LobbyState } from '../lobby/LobbyType';
 import { User } from '../user/UserType';
 import { processVote, setupEventHandlers } from './VoteEventHandler';
-import ReactGA from 'react-ga4';
 
 export type Lobby = {
   connectedUsers: User[],
   state: string
 }
 
-export const VoteView: React.FC = () => {   
-    const handleProcessVote = (vote: number | string) => {
-        const args = {category: "VoteUpdate", action: "Updating Vote", label: `VoteNumber${vote}`};
-        ReactGA.event(args);
-        processVote(socket, user.id, vote, updateVoteFromUser)
-    }
-
+export const VoteView: React.FC = () => {
     const { socket } = useContext(SocketContext)!!;
     const { votes, updateVoteFromUser, setVoteState } = useContext(VoteContext)!!;
     const { voteHistory, updateVoteHistory } = useContext(VoteHistoryContext)!!;
@@ -89,7 +82,7 @@ export const VoteView: React.FC = () => {
             voteNumber = possibilities[parseInt(e.key)];
         }
 
-        handleProcessVote(voteNumber);
+        processVote(socket, user.id, voteNumber, updateVoteFromUser)
 	}
 
     return (
@@ -99,7 +92,7 @@ export const VoteView: React.FC = () => {
                     return (
                         <button 
                             className={isActiveVote(number)} 
-                            onClick={_ => handleProcessVote(number)} 
+                            onClick={_ => processVote(socket, user.id, number, updateVoteFromUser)} 
                             disabled={isVoteDisabled()}
                         >{number}</button>
                     )

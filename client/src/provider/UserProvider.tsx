@@ -30,9 +30,6 @@ export const UserProvider = (props: UserProviderProperties) => {
         if(name != null && !randomUserNames.includes(name)) {
             localStorage.setItem("user-name", name);
         }
-    
-
-        console.log(spectator);
         localStorage.setItem("user-spectator", spectator.toString());
 
         const userDetails = {

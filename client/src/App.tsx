@@ -9,7 +9,7 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ErrorView } from './component/error/ErrorView';
 import { ToastContainer } from 'react-toastify';
-import ReactGA from 'react-ga4';
+import { Analytics } from './common/Analytics';
 
 export const App: React.FC = _ => {  
     const { theme } = useContext(ThemeContext)!!
@@ -17,9 +17,8 @@ export const App: React.FC = _ => {
     const themeToast = (theme.type == ThemeType.DARK) ? "dark" : "light" ;
     const confettiCount = (theme.confettiActive == ConfettiState.FADEOUT) ? 0 : 200 ;
 
-    ReactGA.initialize("G-CCVCFQYZ2F");
-    ReactGA.pageview(window.location.pathname + window.location.search);
-
+    Analytics.initializeTracking();
+    
     return (
         <div id="main" data-theme={ (theme.type == ThemeType.DARK) ? "dark" : "light" }>
             <ToastContainer

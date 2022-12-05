@@ -1,5 +1,6 @@
 import { NavigateFunction } from "react-router-dom";
 import { Socket } from "socket.io-client";
+import { Analytics } from "../../common/Analytics";
 import { RandomUserName } from "../../provider/UserProvider";
 import { User, UserDetails } from "./UserType";
 
@@ -9,6 +10,8 @@ export const registerUser = (
     setUserState: React.Dispatch<React.SetStateAction<User>>
 ) => {
     if(socket != null) {
+        Analytics.trackRegistering();
+
         if(user.userDetails?.name == null || user.userDetails.name.trim() == "") {
             const details = {...user.userDetails, name: RandomUserName()} as UserDetails;
             setUserState({...user, userDetails: details, connected: true});
