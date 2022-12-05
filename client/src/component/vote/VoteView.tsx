@@ -8,6 +8,7 @@ import { VoteContext } from '../../provider/VoteProvider';
 import { LobbyState } from '../lobby/LobbyType';
 import { User } from '../user/UserType';
 import { processVote, setupEventHandlers } from './VoteEventHandler';
+import ReactGA from 'react-ga';
 
 export type Lobby = {
   connectedUsers: User[],
@@ -15,6 +16,12 @@ export type Lobby = {
 }
 
 export const VoteView: React.FC = () => {   
+    const handleProcessVote = (vote: number | string) => {
+        const args = {category: "VoteUpdate", action: "Updating Vote", label: `VoteNumber${vote}`} as ReactGA.EventArgs;
+        ReactGA.event(args);
+        processVote(socket, user.id, vote, updateVoteFromUser)
+    }
+
     const { socket } = useContext(SocketContext)!!;
     const { votes, updateVoteFromUser, setVoteState } = useContext(VoteContext)!!;
     const { voteHistory, updateVoteHistory } = useContext(VoteHistoryContext)!!;
@@ -63,37 +70,26 @@ export const VoteView: React.FC = () => {
     }
 
     function handleKeyVote(e: KeyboardEvent) {
-        if(parseInt(e.key) == 1) { processVote(socket, user.id, 1, updateVoteFromUser)}
-        if(parseInt(e.key) == 2) { processVote(socket, user.id, 2, updateVoteFromUser)}
-        if(parseInt(e.key) == 3) { processVote(socket, user.id, 3, updateVoteFromUser)}
-        if(parseInt(e.key) == 4) { processVote(socket, user.id, 5, updateVoteFromUser)}
-        if(parseInt(e.key) == 5) { processVote(socket, user.id, 8, updateVoteFromUser)}
-        if(parseInt(e.key) == 6) { processVote(socket, user.id, 13, updateVoteFromUser)}
-        if(parseInt(e.key) == 7) { processVote(socket, user.id, 21, updateVoteFromUser)}
-        if(parseInt(e.key) == 8) { processVote(socket, user.id, 34, updateVoteFromUser)}
-        if(parseInt(e.key) == 9) { processVote(socket, user.id, 55, updateVoteFromUser)}
-        if(parseInt(e.key) == 0) { processVote(socket, user.id, "?", updateVoteFromUser)}
-
-        const possibilities = [1,2,3,5,8,13,21,34,55,89,"?"];
+        const possibilities = ["?",1,2,3,5,8,13,21,34,55,89];
         const selectedVote = votes?.filter(vote => vote.userId == user.id)[0];
         let index = possibilities.findIndex(x => x == selectedVote?.amount);
+        let voteNumber = null;
 
         if((e.key == "=" || e.key == "+") && index != undefined) { 
-            console.log(index);
-            if(possibilities[index++] == null || index == 11) {
-                processVote(socket, user.id, possibilities[0], updateVoteFromUser)
-            } else {
-                processVote(socket, user.id, possibilities[index++], updateVoteFromUser)
-            }
+            if(possibilities[index++] == null || index == 11) voteNumber = possibilities[0];
+            else voteNumber = possibilities[index++];
         }
 
         if((e.key == "-" || e.key == "_") && index != undefined) {
-            if(possibilities[index--] == null || index == -1) {
-                processVote(socket, user.id, possibilities[possibilities.length -1], updateVoteFromUser)
-            } else {
-                processVote(socket, user.id, possibilities[index--], updateVoteFromUser)
-            }
+            if(possibilities[index--] == null || index == -1) voteNumber = possibilities[possibilities.length -1];
+            else voteNumber = possibilities[index--];
         }
+
+        if(voteNumber == null) {
+            voteNumber = possibilities[parseInt(e.key)];
+        }
+
+        handleProcessVote(voteNumber);
 	}
 
     return (
@@ -103,7 +99,7 @@ export const VoteView: React.FC = () => {
                     return (
                         <button 
                             className={isActiveVote(number)} 
-                            onClick={_ => processVote(socket, user.id, number, updateVoteFromUser)} 
+                            onClick={_ => handleProcessVote(number)} 
                             disabled={isVoteDisabled()}
                         >{number}</button>
                     )
