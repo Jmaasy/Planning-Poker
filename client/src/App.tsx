@@ -17,7 +17,7 @@ export const App: React.FC = _ => {
     const themeToast = (theme.type == ThemeType.DARK) ? "dark" : "light" ;
     const confettiCount = (theme.confettiActive == ConfettiState.FADEOUT) ? 0 : 200 ;
 
-    ReactGA.initialize("G-CCVCFQYZ2F");
+    ReactGA.initialize("GTM-N65MR32");
 
     return (
         <div id="main" data-theme={ (theme.type == ThemeType.DARK) ? "dark" : "light" }>
