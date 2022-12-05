@@ -3,6 +3,14 @@ import { Socket } from "socket.io-client";
 import { ConfettiState, Theme } from "../../provider/ThemeProvider";
 import { Lobby, LobbyState } from "../lobby/LobbyType";
 import { Vote } from "./VoteType";
+import ReactGA from 'react-ga';
+
+const useTracker = (label: string) => {
+    const eventTracker = (category: string = "voteUpdate", action: string = "Updating Vote") => {
+        ReactGA.event({category, action, label});
+    }
+    return eventTracker;
+}
 
 export const processVote = (
     socket: Socket | null,
@@ -12,6 +20,7 @@ export const processVote = (
 ) => {
     if(socket != null) {
         updateVoteFromUser(userId, vote, false);
+        useTracker(`UpdateVote${vote}`)
         socket.emit("vote", vote);
     }
 }

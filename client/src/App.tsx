@@ -9,12 +9,16 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ErrorView } from './component/error/ErrorView';
 import { ToastContainer } from 'react-toastify';
+import ReactGA from 'react-ga';
 
 export const App: React.FC = _ => {  
     const { theme } = useContext(ThemeContext)!!
     const themeImageMode = (theme.type == ThemeType.DARK) ? "b" : "w" ;
     const themeToast = (theme.type == ThemeType.DARK) ? "dark" : "light" ;
     const confettiCount = (theme.confettiActive == ConfettiState.FADEOUT) ? 0 : 200 ;
+
+    ReactGA.initialize("G-CCVCFQYZ2F");
+
     return (
         <div id="main" data-theme={ (theme.type == ThemeType.DARK) ? "dark" : "light" }>
             <ToastContainer
