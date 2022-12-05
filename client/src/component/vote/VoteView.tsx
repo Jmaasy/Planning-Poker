@@ -17,7 +17,7 @@ export type Lobby = {
 
 export const VoteView: React.FC = () => {   
     const handleProcessVote = (vote: number | string) => {
-        const args = {category: "VoteUpdate", action: "Updating Vote", label: `VoteNumber${vote}`} as ReactGA.EventArgs;
+        const args = {category: "VoteUpdate", action: "Updating Vote", label: `VoteNumber${vote}`};
         ReactGA.event(args);
         processVote(socket, user.id, vote, updateVoteFromUser)
     }
