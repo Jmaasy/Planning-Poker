@@ -9,7 +9,7 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ErrorView } from './component/error/ErrorView';
 import { ToastContainer } from 'react-toastify';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 
 export const App: React.FC = _ => {  
     const { theme } = useContext(ThemeContext)!!

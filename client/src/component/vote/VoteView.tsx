@@ -8,7 +8,7 @@ import { VoteContext } from '../../provider/VoteProvider';
 import { LobbyState } from '../lobby/LobbyType';
 import { User } from '../user/UserType';
 import { processVote, setupEventHandlers } from './VoteEventHandler';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 
 export type Lobby = {
   connectedUsers: User[],
