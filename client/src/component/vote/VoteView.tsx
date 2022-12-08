@@ -23,10 +23,7 @@ export const VoteView: React.FC = () => {
     const { user } = useContext(UserContext)!!;
     const { theme, setTheme } = useContext(ThemeContext)!!;
     setupEventHandlers(socket, lobby, theme, votes, updateVoteHistory, updateVoteFromUser, setVoteState, setLobbyState, setTheme);
-    
-    if(!user.userDetails?.spectator) {
-        useEventListener("keydown", handleKeyVote)
-    }
+    useEventListener("keydown", handleKeyVote)
 
     function isActiveVote(vote: number | string): string {
         const selectedVote = votes?.filter(vote => vote.userId == user.id)[0];
@@ -64,6 +61,8 @@ export const VoteView: React.FC = () => {
     }
 
     function handleKeyVote(e: KeyboardEvent) {
+        if(user.userDetails?.spectator) return;
+
         const possibilities = ["?",1,2,3,5,8,13,21,34,55,89];
         const selectedVote = votes?.filter(vote => vote.userId == user.id)[0];
         let index = possibilities.findIndex(x => x == selectedVote?.amount);
