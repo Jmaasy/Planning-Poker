@@ -23,7 +23,10 @@ export const VoteView: React.FC = () => {
     const { user } = useContext(UserContext)!!;
     const { theme, setTheme } = useContext(ThemeContext)!!;
     setupEventHandlers(socket, lobby, theme, votes, updateVoteHistory, updateVoteFromUser, setVoteState, setLobbyState, setTheme);
-    useEventListener("keydown", handleKeyVote)
+    
+    if(!user.userDetails?.spectator) {
+        useEventListener("keydown", handleKeyVote)
+    }
 
     function isActiveVote(vote: number | string): string {
         const selectedVote = votes?.filter(vote => vote.userId == user.id)[0];
