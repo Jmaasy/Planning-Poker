@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from 'react' 
+import React, { useContext } from 'react' 
+import useEventListener from '../../common/EventListener';
 import { LobbyContext } from '../../provider/LobbyProvider';
 import { SocketContext } from '../../provider/SocketProvider';
 import { ConfettiState, ThemeContext } from '../../provider/ThemeProvider';
@@ -22,10 +23,7 @@ export const VoteView: React.FC = () => {
     const { user } = useContext(UserContext)!!;
     const { theme, setTheme } = useContext(ThemeContext)!!;
     setupEventHandlers(socket, lobby, theme, votes, updateVoteHistory, updateVoteFromUser, setVoteState, setLobbyState, setTheme);
-
-    useEffect(() => {
-        document.addEventListener("keydown", handleKeyVote, true);
-    }, []);
+    useEventListener("keydown", handleKeyVote)
 
     function isActiveVote(vote: number | string): string {
         const selectedVote = votes?.filter(vote => vote.userId == user.id)[0];
@@ -68,12 +66,12 @@ export const VoteView: React.FC = () => {
         let index = possibilities.findIndex(x => x == selectedVote?.amount);
         let voteNumber = null;
 
-        if((e.key == "=" || e.key == "+") && index != undefined) { 
+        if((e.key == "=" || e.key == "+" || e.key == "ArrowRight") && index != undefined) { 
             if(possibilities[index++] == null || index == 11) voteNumber = possibilities[0];
             else voteNumber = possibilities[index++];
         }
 
-        if((e.key == "-" || e.key == "_") && index != undefined) {
+        if((e.key == "-" || e.key == "_" || e.key == "ArrowLeft") && index != undefined) {
             if(possibilities[index--] == null || index == -1) voteNumber = possibilities[possibilities.length -1];
             else voteNumber = possibilities[index--];
         }
@@ -82,7 +80,7 @@ export const VoteView: React.FC = () => {
             voteNumber = possibilities[parseInt(e.key)];
         }
 
-        processVote(socket, user.id, voteNumber, updateVoteFromUser)
+        processVote(socket, user.id, voteNumber, updateVoteFromUser);
 	}
 
     return (

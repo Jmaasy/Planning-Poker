@@ -11,7 +11,7 @@ export const processVote = (
     vote: number | string,
     updateVoteFromUser: (uId: string, number: number | string, hidden: boolean) => void
 ) => {
-    if(socket != null) {
+    if(socket != null && userId != "") {
         Analytics.trackVoting(vote);
         updateVoteFromUser(userId, vote, false);
         socket.emit("vote", vote);

@@ -10,7 +10,6 @@ import { VoteHistoryView } from '../vote/VoteHistoryView';
 import { VoteView } from '../vote/VoteView';
 import { generateCards, getPycCenter } from './LobbyBuilder';
 import { setupEventHandlers } from './LobbyEventHandler';
-import { toast } from 'react-toastify';
 import './LobbyView.css';
 
 export const LobbyView: React.FC = () => {   
@@ -30,11 +29,6 @@ export const LobbyView: React.FC = () => {
     }
 
     const mobileModeClass = (theme.buttonMode) ? "mobile-mode" : "";
-    
-    if(user.userDetails?.spectator) {
-        toast.info('Connected as a spectator.');
-        toast.clearWaitingQueue();
-    }
 
     return (
         <div className="room-scene">

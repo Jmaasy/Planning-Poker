@@ -1,4 +1,5 @@
 import React, { ReactElement, useState } from 'react';
+import { toast } from 'react-toastify';
 import { User, UserDetails } from '../component/user/UserType';
 
 export type UserProviderProperties = {
@@ -38,6 +39,12 @@ export const UserProvider = (props: UserProviderProperties) => {
             inLobby: inLobby ?? currentUserDetails?.inLobby,
             lobbyId: lobbyId ?? currentUserDetails?.lobbyId
         } as UserDetails
+
+        if(userDetails?.spectator) {
+            toast.info('Connected as a spectator.');
+            toast.clearWaitingQueue();
+        }
+
         setUser({ ...user, userDetails: userDetails });
     }
 
