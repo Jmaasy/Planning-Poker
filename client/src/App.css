@@ -642,13 +642,9 @@ z-index:100;
     display: none;
   }
   
-  .bottom-row.mobile-mode .voting-buttons, header.mobile-mode {
-    position: unset;
-  }
-  
   .bottom-row.mobile-mode .voting-buttons button {
     width: 27vw;
-    height: calc(25% - 52px);
+    height: calc(25% - 10px);
   }
   
   .bottom-row.mobile-mode .voting-buttons button.selected {
@@ -657,7 +653,7 @@ z-index:100;
   }
   
   header.mobile-mode + .room-scene, .bottom-row.mobile-mode, .bottom-row.mobile-mode .voting-buttons {
-    height: 100%;
+    height: calc(100% - 152px);
   }   
   
   .tooltip, .share-link {
@@ -1031,7 +1027,6 @@ header {
 .christmas_footer {
   position: absolute;
   right: 0;
-  width: 100%;
   bottom: 0;
   max-height: 250px;
 }
