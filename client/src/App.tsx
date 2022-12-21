@@ -3,16 +3,17 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Header } from './common/Header';
 import { RegisterView } from './component/user/RegisterView';
 import { LobbyView } from './component/lobby/LobbyView';
-import { ConfettiState, ThemeContext, ThemeType } from './provider/ThemeProvider';
+import { ConfettiState, FestiveType, ThemeContext, ThemeType } from './provider/ThemeProvider';
 import Confetti from 'react-confetti'
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ErrorView } from './component/error/ErrorView';
 import { ToastContainer } from 'react-toastify';
 import { Analytics } from './common/Analytics';
+import Snowfall from 'react-snowfall';
 
 export const App: React.FC = _ => {  
-    const { theme } = useContext(ThemeContext)!!
+    const { theme, getFestiveCenterImage } = useContext(ThemeContext)!!
     const themeImageMode = (theme.type == ThemeType.DARK) ? "b" : "w" ;
     const themeToast = (theme.type == ThemeType.DARK) ? "dark" : "light" ;
     const confettiCount = (theme.confettiActive == ConfettiState.FADEOUT) ? 0 : 200 ;
@@ -21,6 +22,8 @@ export const App: React.FC = _ => {
     
     return (
         <div id="main" data-theme={ (theme.type == ThemeType.DARK) ? "dark" : "light" }>
+            {(theme.festive != null && theme.festive == FestiveType.CHRISTMAS) ? <Snowfall /> : "" }
+            { getFestiveCenterImage() }
             <ToastContainer
                 limit={1}
                 theme={themeToast}

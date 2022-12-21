@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { LobbyContext } from '../../provider/LobbyProvider';
 import { SocketContext } from '../../provider/SocketProvider';
-import { ThemeContext } from '../../provider/ThemeProvider';
+import { FestiveType, ThemeContext } from '../../provider/ThemeProvider';
 import { UserContext } from '../../provider/UserProvider';
 import { VoteContext } from '../../provider/VoteProvider';
 import { resetVotes, revealVotes } from '../vote/VoteEventHandler';
@@ -17,7 +17,7 @@ export const LobbyView: React.FC = () => {
     const { lobby, getEvenUsers, getOddUsers, setLobbyState, addUserToLobby, removeUserFromLobby } = useContext(LobbyContext)!!;
     const { id } = useParams();
     const { socket, socketConnectionWasLost } = useContext(SocketContext)!!;
-    const { theme, getFestiveCenterImage } = useContext(ThemeContext)!!;
+    const { theme } = useContext(ThemeContext)!!;
     const { votes, updateVoteFromUser } = useContext(VoteContext)!!;
     const navigate = useNavigate();
     
@@ -38,14 +38,13 @@ export const LobbyView: React.FC = () => {
                 </div>
                 <div className="pyc-center">
                     { getPycCenter(user, lobby, socket, resetVotes, revealVotes) }
-                    { getFestiveCenterImage() }
                 </div>
                 <div className="lower-users">
                     { generateCards(getEvenUsers(lobby?.users ?? []), lobby, votes, user) }
                 </div>
             </div>
             <div className={`bottom-row ${mobileModeClass}`}>
-                <span className="room-identifier">Room id<span className="room-id">{ lobby?.id }</span></span>
+                <span className={`room-identifier ${(theme.festive != null && theme.festive == FestiveType.CHRISTMAS)? 'identifier-hidden' : ''}`}>Room id<span className="room-id">{ lobby?.id }</span></span>
                 <VoteView></VoteView>
             </div>
             <VoteHistoryView></VoteHistoryView>

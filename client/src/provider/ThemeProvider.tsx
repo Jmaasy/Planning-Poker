@@ -42,12 +42,12 @@ export enum FestiveType {
 
 export enum FestiveLogo {
     EASTER = "bunny",
-    CHRISTMAS = "mistletoe"
+    CHRISTMAS = ""
 }
 
 export enum FestiveCenter {
     EASTER = "bunny_ears",
-    CHRISTMAS = "mistletoe"
+    CHRISTMAS = "christmas_footer"
 }
 
 export enum ThemeBackground {
@@ -89,13 +89,16 @@ export const ThemeProvider = (props: ThemeProviderProperties) => {
 
     const getFestiveCenterImage = () => {
         return (
-            <img src={`public/images/${theme.festiveCenter}.png`} alt={theme.festive?.toLowerCase()?? ""} className={theme.festiveCenter?? ""}></img>
+            <div>
+                <img src={`/public/images/${theme.festiveCenter}_1700.png`} alt={theme.festive?.toLowerCase()?? ""} className={"festive-center-1700 " + theme.festiveCenter?? ""}></img>
+                <img src={`/public/images/${theme.festiveCenter}_2600.png`} alt={theme.festive?.toLowerCase()?? ""} className={"festive-center-2600 " + theme.festiveCenter?? ""}></img>
+            </div>
         )
     }
 
     const getFestiveLogoImage = () => {
         return (
-            <img src={`public/images/${theme.festiveLogo}.png`} alt={theme.festive?.toLowerCase()?? ""} className={`${theme.festiveLogo}-logo`}></img>
+            <img src={`/public/images/${theme.festiveLogo}.png`} alt={theme.festive?.toLowerCase()?? ""} className={`${theme.festiveLogo}-logo`}></img>
         )
     }
 

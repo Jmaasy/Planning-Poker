@@ -90,6 +90,11 @@ html, body, #root, #main {
   vertical-align: bottom;
 }
 
+.voting-buttons button.button-christmas {
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+
 .voting-buttons button:disabled {
   opacity: .6;
 }
@@ -97,6 +102,11 @@ html, body, #root, #main {
 .voting-buttons button:hover {
   background: var(--primary);
   color: #fff;
+}
+
+.voting-buttons button.button-christmas:hover {
+  background: var(--alternative) !important;
+  border-color: var(--alternative) !important;
 }
 
 .voting-buttons button:disabled:hover {
@@ -1016,4 +1026,32 @@ header {
 
 .Toastify__toast--error .Toastify__close-button + div {
   background: red !important;
+}
+
+.christmas_footer {
+  position: absolute;
+  right: 0;
+  width: 100%;
+  bottom: 0;
+  max-height: 250px;
+}
+
+.identifier-hidden {
+  display: none !important;
+}
+
+.festive-center-1700, .festive-center-2600 {
+  display: none;
+}
+
+@media (max-width:1700px) {
+  .festive-center-1700 {
+    display: block;
+  }
+}
+
+@media (min-width:2600px) {
+  .festive-center-2600 {
+    display: block;
+  }
 }

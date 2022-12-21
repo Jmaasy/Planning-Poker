@@ -30,7 +30,6 @@ export const RegisterView: React.FC = () => {
                 <input type="checkbox" checked={user.userDetails?.spectator || false} onChange={e => setUserDetails(null, e.target.checked)}/>
                 <span className="checkmark"></span>
             </label>
-            { getFestiveCenterImage() }
             <button onClick={_ => registerUser(socket, user, setUserState)} id="user-name-continue">continue</button>
         </div>
     );

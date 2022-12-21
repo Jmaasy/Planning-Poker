@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import useEventListener from '../../common/EventListener';
 import { LobbyContext } from '../../provider/LobbyProvider';
 import { SocketContext } from '../../provider/SocketProvider';
-import { ConfettiState, ThemeContext } from '../../provider/ThemeProvider';
+import { ConfettiState, FestiveType, ThemeContext } from '../../provider/ThemeProvider';
 import { UserContext } from '../../provider/UserProvider';
 import { VoteHistoryContext } from '../../provider/VoteHistoryProvider';
 import { VoteContext } from '../../provider/VoteProvider';
@@ -60,8 +60,12 @@ export const VoteView: React.FC = () => {
         }
     }
 
+    function isFestiveButton() {
+        return (theme.festive != null && theme.festive == FestiveType.CHRISTMAS)? " button-christmas " : "" ;
+    }
+
     function handleKeyVote(e: KeyboardEvent) {
-        if(user.userDetails?.spectator) return;
+        if(user.userDetails?.spectator || lobby?.state == LobbyState.REVEALED || (lobby?.state == LobbyState.COUNTDOWN && lobby.revealIn == 1)) return;
 
         const possibilities = ["?",1,2,3,5,8,13,21,34,55,89];
         const selectedVote = votes?.filter(vote => vote.userId == user.id)[0];
@@ -91,7 +95,7 @@ export const VoteView: React.FC = () => {
                 getButtons().map(number => {
                     return (
                         <button 
-                            className={isActiveVote(number)} 
+                            className={isActiveVote(number) + isFestiveButton()} 
                             onClick={_ => processVote(socket, user.id, number, updateVoteFromUser)} 
                             disabled={isVoteDisabled()}
                         >{number}</button>
