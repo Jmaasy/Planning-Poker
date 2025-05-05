@@ -4,7 +4,7 @@ WORKDIR /
 
 COPY server/package*.json ./server/
 COPY server/dist ./server/dist
-COPY client/dist ./client/dist
+COPY client/build ./client/build
 
 WORKDIR /server
 RUN npm ci --omit=dev
