@@ -41,9 +41,30 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ github.repository_owner }}/my-ts-service:${{ github.sha }}
+      - name: Build Docker image
+        run: |
+          IMAGE_REPO="ghcr.io/${GITHUB_REPOSITORY,,}"
+          docker buildx build \
+            --platform linux/arm64 \
+            -t $IMAGE_REPO:latest \
+            -t $IMAGE_REPO:${{ github.sha }} \
+            --load .
+
+      - name: Push Docker image
+        run: |
+          IMAGE_REPO="ghcr.io/${GITHUB_REPOSITORY,,}"
+          docker push $IMAGE_REPO:latest
+          docker push $IMAGE_REPO:${{ github.sha }}
+
+      - name: Update image in manifest
+        run: |
+          IMAGE_REPO="ghcr.io/${GITHUB_REPOSITORY,,}"
+          sed -i "s|ghcr.io/.*/planning-poker:.*|$IMAGE_REPO:${{ github.sha }}|g" manifest/k8s.yaml
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add manifest/k8s.yaml
+          git commit -m "Update image tag to ${{ github.sha }}"
+          git push
