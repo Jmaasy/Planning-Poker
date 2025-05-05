@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planning-poker
+  namespace: random-services
+spec:
+  replicas: 
+  selector:
+    matchLabels:
+      app: planning-poker
+  template:
+    metadata:
+      labels:
+        app: planning-poker
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: planning-poker
+          image: ghcr.io/jmaasy/planning-poker:f97deafdec03d2de0fe1fe176f06036e889c695b
+          ports:
+            - containerPort: 443
+          env:
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: planning-poker-lb
+  namespace: random-services
+spec:
+  selector:
+    app: planning-poker
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 443
+  type: LoadBalancer
