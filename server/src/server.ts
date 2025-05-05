@@ -1,7 +1,6 @@
 import * as express from 'express'
 import * as http from 'http'
 import * as https from 'https'
-import * as socketio from 'socket.io'
 import * as path from "path";
 import * as cors from "cors";
 import * as dotenv from 'dotenv';
@@ -25,18 +24,25 @@ const app = express()
         res.sendFile(path.resolve("../client/build/index.html"));
       });
 
-const server = https.createServer({
-  cert: fs.readFileSync(process.env.CRT),
-  key: fs.readFileSync(process.env.KEY)
-}, app);
-// const server = http.createServer(app);
+
+// I shouldn't need the certs since I have a reverse proxy managing the certs
+
+// if (process.env.ENVIRONMENT == "development") {
+const server = http.createServer(app);
+// } else {
+//   server = https.createServer({
+//     cert: fs.readFileSync(process.env.CRT),
+//     key: fs.readFileSync(process.env.KEY)
+//   }, app);
+// }
+
 const io = new Server(server, { cors: { origin: '*' }, allowEIO3: true, pingInterval: 50, transports: ["websocket"]});
 
 io.on("connect_error", (err) => Logger.ERROR(err));
 io.on('connection', (socket) => {
   socket.on("create-user", (userData: RegisterUserData) => {
     const connectedCount = connected.get(socket.handshake.address) ?? 0;
-    if (connectedCount < (process.env.LIMIT ?? 5)) {
+    if (connectedCount < (Number(process.env.LIMIT ?? 5))) {
       connected.set(socket.handshake.address, connectedCount + 1 );
       planningPoker.userHandler.createUser(socket, socket.id, userData);
     } else {
