@@ -20,13 +20,13 @@ jobs:
         working-directory: ./client
         run: |
           npm ci
-          npm run build
+          CI=false npm run build
 
       - name: Install and build server
         working-directory: ./server
         run: |
           npm ci
-          npm run build
+          CI=false npm run build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
