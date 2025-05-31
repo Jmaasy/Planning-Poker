@@ -17,7 +17,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: planning-poker
-          image: ghcr.io/jmaasy/planning-poker:b63c680f2a8d7a127fb39bb8956fc1ffe887d008
+          image: ghcr.io/jmaasy/planning-poker:0f14723fe931dbf45b9ac5499c1c6129e8fc1a95
           ports:
             - containerPort: 443
           env:
