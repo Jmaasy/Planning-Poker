@@ -5,7 +5,7 @@ import { RoomState } from './room/room';
 import RoomHandler from './room/roomHandler';
 import UserHandler from './user/userHandler';
 
-class PlanningPoker {
+class StoryPoker {
     roomHandler = new RoomHandler()
     userHandler = new UserHandler()
 
@@ -194,4 +194,4 @@ class PlanningPoker {
     }
 }
 
-export default PlanningPoker;
+export default StoryPoker;

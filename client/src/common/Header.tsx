@@ -58,6 +58,6 @@ const copyRoomId = (
     if(lobby != null && lobby.id !== undefined && lobby.id != null) {
         const registerUrl = `${window.location.origin}/register`;
         navigator.clipboard.writeText(`${registerUrl}/${lobby?.id}`);
-        toast.success('PlanningPoker link has been copied to your clipboard.');
+        toast.success('StoryPoker link has been copied to your clipboard.');
     }
 }

@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: planning-poker
+  name: story-poker
   namespace: random-services
 spec:
   replicas: 
   selector:
     matchLabels:
-      app: planning-poker
+      app: story-poker
   template:
     metadata:
       labels:
-        app: planning-poker
+        app: story-poker
     spec:
       imagePullSecrets:
         - name: ghcr-secret
       containers:
-        - name: planning-poker
-          image: ghcr.io/jmaasy/planning-poker:0f14723fe931dbf45b9ac5499c1c6129e8fc1a95
+        - name: story-poker
+          image: ghcr.io/jmaasy/story-poker:0f14723fe931dbf45b9ac5499c1c6129e8fc1a95
           ports:
             - containerPort: 443
           env:
@@ -25,11 +25,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: planning-poker-lb
+  name: story-poker-lb
   namespace: random-services
 spec:
   selector:
-    app: planning-poker
+    app: story-poker
   ports:
     - protocol: TCP
       port: 443

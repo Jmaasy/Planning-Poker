@@ -5,7 +5,7 @@ import * as path from "path";
 import * as cors from "cors";
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
-import PlanningPoker from './planningPoker';
+import StoryPoker from './planningPoker';
 import Logger from './logger';
 import { Server } from "socket.io";
 import { RegisterUserData } from './user/user';
@@ -14,7 +14,7 @@ import { buildResponse, emitToSelf } from './response';
 const connected: Map<string, number> = new Map();
 const env = dotenv.config();
 const port = 443;
-const planningPoker = new PlanningPoker();
+const planningPoker = new StoryPoker();
 const app = express()
       app.use(cors());
       app.use(express.static('../client/build'));
@@ -25,17 +25,7 @@ const app = express()
       });
 
 
-// I shouldn't need the certs since I have a reverse proxy managing the certs
-
-// if (process.env.ENVIRONMENT == "development") {
 const server = http.createServer(app);
-// } else {
-//   server = https.createServer({
-//     cert: fs.readFileSync(process.env.CRT),
-//     key: fs.readFileSync(process.env.KEY)
-//   }, app);
-// }
-
 const io = new Server(server, { cors: { origin: '*' }, allowEIO3: true, pingInterval: 50, transports: ["websocket"]});
 
 io.on("connect_error", (err) => Logger.ERROR(err));

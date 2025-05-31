@@ -59,7 +59,7 @@ jobs:
       - name: Update image in manifest
         run: |
           IMAGE_REPO="ghcr.io/${GITHUB_REPOSITORY,,}"
-          sed -i "s|ghcr.io/.*/planning-poker:.*|$IMAGE_REPO:${{ github.sha }}|g" manifest/k8s.yaml
+          sed -i "s|ghcr.io/.*/story-poker:.*|$IMAGE_REPO:${{ github.sha }}|g" manifest/k8s.yaml
 
       - name: Commit and push changes
         run: |
