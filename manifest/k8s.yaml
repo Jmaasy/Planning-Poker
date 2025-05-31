@@ -17,7 +17,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: story-poker
-          image: ghcr.io/jmaasy/story-poker:0f14723fe931dbf45b9ac5499c1c6129e8fc1a95
+          image: ghcr.io/jmaasy/planning-poker:27c2058eee5d55efc4b1774e09f220fab9167e4b
           ports:
             - containerPort: 443
           env:
