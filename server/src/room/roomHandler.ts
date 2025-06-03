@@ -30,6 +30,7 @@ class RoomHandler {
         };
 
         this.setState(roomId, RoomState.VOTED);
+
         this.rooms.get(roomId).votes.set(clientId, vote);
 
         return vote;

@@ -31,22 +31,37 @@ const io = new Server(server, { cors: { origin: '*' }, allowEIO3: true, pingInte
 io.on("connect_error", (err) => Logger.ERROR(err));
 io.on('connection', (socket) => {
   socket.on("create-user", (userData: RegisterUserData) => {
+    Logger.LOG("SOCKET", `[create-user] Processing event for user ${userData}`)
+
     const connectedCount = connected.get(socket.handshake.address) ?? 0;
-    if (connectedCount < (Number(process.env.LIMIT ?? 5))) {
-      connected.set(socket.handshake.address, connectedCount + 1 );
-      planningPoker.userHandler.createUser(socket, socket.id, userData);
-    } else {
-      Logger.ERROR("Maximum amount of users reached for given address");
-      const resp = buildResponse(null, true, "Maximum amount of users reached");
-      emitToSelf(socket, "registration-processed", resp);
-    }
+    Logger.WARN(`Maximum amount of users reached for address ${socket.handshake.address} and username ${userData.name}`);
+    
+    connected.set(socket.handshake.address, connectedCount + 1 );
+    planningPoker.userHandler.createUser(socket, socket.id, userData);
   })
-  socket.on("validate-room", (roomId: string) => planningPoker.validateRoom(socket, roomId))
-  socket.on("create-room", _ => planningPoker.createRoom(socket, socket.id, "lol"));
-  socket.on("join-room", (roomId: string) => planningPoker.joinRoom(socket, socket.id, roomId));
-  socket.on("get-room-state", (roomId: string) => planningPoker.getRoomState(socket, socket.id, roomId));
-  socket.on("vote", (number: string) => planningPoker.vote(socket, socket.id, number));
+  socket.on("validate-room", (roomId: string) => {
+    Logger.LOG("SOCKET", `[validate-room] Processing event for room with ID ${roomId}`)
+    planningPoker.validateRoom(socket, roomId)
+  })
+  socket.on("create-room", _ => {
+    Logger.LOG("SOCKET", `[create-room] Processing event for user with id ${socket.id}`)
+    planningPoker.createRoom(socket, socket.id, "lol")
+  });
+  socket.on("join-room", (roomId: string) => {
+    Logger.LOG("SOCKET", `[join-room] Processing event for user with id ${socket.id} and room with id ${roomId}`)
+    planningPoker.joinRoom(socket, socket.id, roomId)
+  });
+  socket.on("get-room-state", (roomId: string) => {
+    Logger.LOG("SOCKET", `[get-room-state] Processing event for user with id ${socket.id} and room with id ${roomId}`)
+    planningPoker.getRoomState(socket, socket.id, roomId)
+  });
+  socket.on("vote", (number: string) => {
+    Logger.LOG("SOCKET", `[vote] Processing event for user with id ${socket.id} vote number ${number}`)
+    planningPoker.vote(socket, socket.id, number)
+  });
   socket.on("disconnect", _ => {
+    Logger.LOG("SOCKET", `[disconnect] Processing disconnect for user with id ${socket.id}`)
+
     const connectedCount = connected.get(socket.handshake.address) ?? -1;
     if (connectedCount != -1 && connectedCount > 1) {
       connected.set(socket.handshake.address, connectedCount - 1 );
@@ -56,8 +71,14 @@ io.on('connection', (socket) => {
 
     planningPoker.removeUser(socket, socket.id);
   });
-  socket.on("reveal-votes", _ => planningPoker.revealVotes(socket, socket.id));
-  socket.on("reset-votes", _ => planningPoker.resetVotes(socket, socket.id));
+  socket.on("reveal-votes", _ => {
+    Logger.LOG("SOCKET", `[reveal-votes] Processing event for user with id ${socket.id}`)
+    planningPoker.revealVotes(socket, socket.id)
+  });
+  socket.on("reset-votes", _ => {
+    Logger.LOG("SOCKET", `[reset-votes] Processing event for user with id ${socket.id}`)
+    planningPoker.resetVotes(socket, socket.id)
+  });
 });
 
 server.listen(port, () => Logger.LOG("STARTING", `Running on port ${port}`));

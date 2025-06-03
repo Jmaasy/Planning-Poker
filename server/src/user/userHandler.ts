@@ -31,7 +31,14 @@ class UserHandler {
         const identifier = this.userValidator.getIdentifier(clientId);
         const user = this.getUserById(identifier);
         if(user == undefined) return false;
-        return (user.clientId == clientId && user.socket.handshake.time == socket.handshake.time);
+
+        const validatedUser = (user.clientId == clientId && user.socket.handshake.time == socket.handshake.time);
+
+        if (!validatedUser) {
+            Logger.LOG("USER", `Validation of user with id ${socket.id} failed`, "ERROR");
+        }
+
+        return validatedUser;
     }
 
     getSockets(userIds: string[], filter: string[]): Socket[] {

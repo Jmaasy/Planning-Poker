@@ -22,7 +22,7 @@ class StoryPoker {
         
             Logger.LOG("ROOM", `User ${user.name} has created room ${roomId}`);
         } else {
-            Logger.ERROR(`Invalid user action! User ${clientId} is not validated and therefore cannot vote on a room.`);
+            Logger.ERROR(`Invalid user action! User ${clientId} is not validated and therefore cannot create a room.`);
         }
     }
 
@@ -49,7 +49,12 @@ class StoryPoker {
         if(this.userHandler.validateUser(clientId, socket)) {
             const userId = this.userHandler.getIdentifier(clientId);
             const user = this.userHandler.getUserWithoutSocket(userId);
-            this.roomHandler.handleVote(user.roomId, clientId, number);
+            if (this.roomHandler.getState(user.roomId) != RoomState.ERROR) {
+                Logger.LOG("VOTE", `Found room ${user.roomId}, adding vote for user ${user.name}`)
+                this.roomHandler.handleVote(user.roomId, clientId, number);
+            } else {
+                Logger.LOG("VOTE", `Someone(${user.name}) attempted to vote on room(${user.roomId}) that has error state.`, "ERROR")
+            }
             
             const connectedIds = this.roomHandler.getConnectedUserIds(user.roomId);
             const sockets = this.userHandler.getSockets(connectedIds, [userId]);
@@ -85,6 +90,8 @@ class StoryPoker {
             const sockets = this.getSocketsFromRoomId(user.roomId, [userId]);
             const resp = buildResponse("");
             emitToAll(sockets, socket, resp, "vote-reset-processed");
+        } else {
+            Logger.ERROR(`Invalid user action! User ${clientId} is not validated and therefore cannot reset votes on a room.`);
         }
     }
 
@@ -133,6 +140,8 @@ class StoryPoker {
             } else {
                 Logger.WARN("Already received request to reveal votes, request will be ignored.");
             }
+        } else {
+            Logger.ERROR(`Invalid user action! User ${clientId} is not validated and therefore cannot reveal votes on a room.`);
         }
     }
 
@@ -169,7 +178,7 @@ class StoryPoker {
                 emitToSelf(socket, "join-room-emit-not-processed", resp);
             }
         } else {
-            Logger.ERROR(`Invalid user action! User ${clientId} is not validated and therefore cannot vote on a room.`);
+            Logger.ERROR(`Invalid user action! User ${clientId} is not validated and therefore cannot join a room.`);
         }
     }
 
