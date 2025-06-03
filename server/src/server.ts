@@ -30,6 +30,8 @@ const io = new Server(server, { cors: { origin: '*' }, allowEIO3: true, pingInte
 
 io.on("connect_error", (err) => Logger.ERROR(err));
 io.on('connection', (socket) => {
+  Logger.LOG("CONNECT", `${socket.request.headers['user-agent']}`)
+
   socket.on("create-user", (userData: RegisterUserData) => {
     Logger.LOG("SOCKET", `[create-user] Processing event for user with name ${userData.name} and spectator mode ${userData.spectator}`)
 
