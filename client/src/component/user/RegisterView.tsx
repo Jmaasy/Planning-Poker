@@ -16,7 +16,11 @@ export const RegisterView: React.FC = () => {
 
     useEffect(() => {
         document.addEventListener("keydown", handleKeyVote, true);
-    }, []);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyVote);
+        }
+    }, [user]);
 
     function handleKeyVote(e: KeyboardEvent) {
         if(e.key == "Enter") registerUser(socket, user, setUserState)

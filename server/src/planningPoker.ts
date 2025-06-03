@@ -42,6 +42,8 @@ class StoryPoker {
             }
 
             this.userHandler.removeUser(clientId);
+        } else {
+            Logger.ERROR(`Invalid user action! User ${clientId} is not validated and therefore cannot be removed from a lobby.`);
         }
     }
 

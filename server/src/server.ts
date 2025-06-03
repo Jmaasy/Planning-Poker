@@ -31,7 +31,7 @@ const io = new Server(server, { cors: { origin: '*' }, allowEIO3: true, pingInte
 io.on("connect_error", (err) => Logger.ERROR(err));
 io.on('connection', (socket) => {
   socket.on("create-user", (userData: RegisterUserData) => {
-    Logger.LOG("SOCKET", `[create-user] Processing event for user ${userData}`)
+    Logger.LOG("SOCKET", `[create-user] Processing event for user with name ${userData.name} and spectator mode ${userData.spectator}`)
 
     const connectedCount = connected.get(socket.handshake.address) ?? 0;
     Logger.WARN(`Maximum amount of users reached for address ${socket.handshake.address} and username ${userData.name}`);

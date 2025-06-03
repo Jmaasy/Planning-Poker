@@ -8,7 +8,7 @@ interface Response {
 }
 
 function emitToUsers(sockets: Socket[], event: string, response: Response) {
-    Logger.LOG("EMIT", "Emitting to all connected users besides self");
+    Logger.LOG("EMIT", "Emitting to all connected users besides self", "DEBUG");
     sockets.forEach((socket: Socket) => {
         socket.emit(event, response);
     });
@@ -20,7 +20,7 @@ function emitToAll(sockets: Socket[], socket: Socket, response: Response, event:
 }
 
 function emitToSelf(socket: Socket, event: string, response: Response) {
-    Logger.LOG("EMIT", "Emitting to self");
+    Logger.LOG("EMIT", "Emitting to self", "DEBUG");
     socket.emit(event, response);
 }
 
