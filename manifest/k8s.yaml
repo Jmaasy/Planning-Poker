@@ -4,7 +4,7 @@ metadata:
   name: story-poker
   namespace: random-services
 spec:
-  replicas: 
+  replicas: 1
   selector:
     matchLabels:
       app: story-poker
@@ -21,6 +21,20 @@ spec:
           ports:
             - containerPort: 443
           env:
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: story-poker
+  namespace: random-services
+spec:
+  selector:
+    app: story-poker
+  ports:
+    - protocol: TCP
+      port: 443
+      targetPort: 443
+  type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
