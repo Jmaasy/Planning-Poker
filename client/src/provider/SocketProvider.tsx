@@ -58,7 +58,7 @@ export const SocketProvider = (props: SocketProviderProperties) => {
 };
 
 export const startupSocketState = (): SocketType => {
-    const socket = io(`https://storypoker.dev:443`, {secure: true, timeout: 100, reconnectionDelay: 500, reconnectionDelayMax:500, transports: ["websocket"]});
+    const socket = io(`https://storypoker.dev:443`, {secure: true, timeout: 1000, reconnectionDelay: 500, reconnectionDelayMax:500, transports: ["websocket"]});
     // const socket = io(`http://localhost:443`, {secure: true, timeout: 100, reconnectionDelay: 500, reconnectionDelayMax:500, transports: ["websocket"]});
     return {
         socket: socket,

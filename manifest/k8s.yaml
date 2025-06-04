@@ -22,26 +22,17 @@ spec:
             - containerPort: 443
           env:
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: story-poker-lb
-  namespace: random-services
-spec:
-  selector:
-    app: story-poker
-  ports:
-    - protocol: TCP
-      port: 443
-      targetPort: 443
-  type: LoadBalancer
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: story-poker
   namespace: random-services
   annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "86400"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "86400"
+    nginx.ingress.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
     nginx.ingress.kubernetes.io/use-proxy-protocol: "true"
     nginx.ingress.kubernetes.io/proxy-real-ip-cidr: "0.0.0.0/0"
     nginx.ingress.kubernetes.io/configuration-snippet: |
