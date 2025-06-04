@@ -13,7 +13,7 @@ import { buildResponse, emitToSelf } from './response';
 
 const connected: Map<string, number> = new Map();
 const env = dotenv.config();
-const port = 443;
+const port = 80;
 const planningPoker = new StoryPoker();
 const app = express()
       app.use(cors());

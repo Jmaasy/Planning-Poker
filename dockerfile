@@ -9,6 +9,6 @@ COPY client/build ./client/build
 WORKDIR /server
 RUN npm ci --omit=dev
 
-EXPOSE 443
+EXPOSE 80
 
 CMD ["node", "dist/server.js"]
